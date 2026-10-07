@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Apertus Lab 工作台</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body><main>
+<header><div><p class="eyebrow">APERTUS LAB · LOCAL WORKSPACE</p><h1>研究工作台</h1><p>查看运行记录、判定依据和知识引用。</p></div><button id="refresh">刷新记录</button></header>
+<div class="notice">当前工作台提供只读查看。运行状态、假设结果和人工审核分别显示；模型调用由受控实验入口执行。</div>
+<p id="error" role="alert"></p><section id="metrics" class="metrics"></section>
+<section><h2>组件状态</h2><div id="components" class="components"></div></section>
+<section><h2>已有运行</h2><p class="muted">点击一条运行，查看输入、实际回答与判定依据。</p><div id="runs" class="runs"></div></section>
+<section id="detail" hidden><h2 id="detail-title">运行详情</h2><p id="hypothesis"></p><div id="attempts"></div></section>
+<section><div class="section-head"><h2>知识页与引用</h2><a href="http://127.0.0.1:3000" target="_blank" rel="noreferrer">打开完整 LLM Wiki ↗</a></div><p class="muted">完整 Wiki 需另行启动；candidate 表示待审核的知识草稿，不表示发现了模型问题。</p><input id="wiki-filter" placeholder="按页面、模型、语言或状态筛选" aria-label="筛选知识页"><div id="wiki"></div></section>
+<footer>实验账本是原始依据 · 工作台和 Wiki 保存派生信息 · 当前研究 Agent 未配置</footer>
+</main></body></html>

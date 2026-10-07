@@ -1,0 +1,16 @@
+LLM Wiki source: https://github.com/lucasastorian/llmwiki.git
+Revision: aac3e6493306b7fff3b09cb181ca93918e93d0e6
+Install date: 2026-10-06 (Europe/Zurich)
+
+Repository README requirements:
+- Python 3.11+
+- Node.js 20+
+
+Verified:
+- Python 3.13.13 environment created at knowledge/llmwiki/.venv
+- API and MCP requirements installed successfully
+- web npm dependencies installed successfully
+- `python llmwiki --help` exited 0
+- `PYTHONIOENCODING=utf-8 python llmwiki init experiments/wiki-workspace` confirmed initialized workspace and index.db
+
+Note: npm reported 41 audit findings (6 low, 27 moderate, 7 high, 1 critical). No audit fix was applied.

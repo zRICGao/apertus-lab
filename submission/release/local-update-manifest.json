@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-07",
+  "change": "Automatic reproduction experiment ID; local env support",
+  "initial_build_manifest_sha256": "2a176aee2639232ea2ab1598cf9d7e367fe78e742b546ac205301ba01e4ec429",
+  "files": {
+    "track_1a/Makefile": "22a9dd326544a14c3b4637d372ab3a9abb9ee61827e587afca18e84bb36a325c",
+    "track_1a/README.md": "88e66a6b266584e26001a9f105e02cd4fa2b9a6c00a65ddb3a7911197047780b",
+    "track_1a/src/apertus_lab/reproduce.py": "69193893d1c49ea3ed281e69136ec72f17ecb8acdd0060769fed3fb7cf5b9c16"
+  },
+  "source": "experiments/src/apertus_lab/reproduce.py",
+  "validation": "2 new and 18 MVP offline checks passed; no live request"
+}

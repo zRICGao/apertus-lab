@@ -1,0 +1,63 @@
+test_budget_preserves_replay (test_basic.BasicTests.test_budget_preserves_replay) ... ok
+test_cancel_is_terminal (test_basic.BasicTests.test_cancel_is_terminal) ... ok
+test_cli_requires_explicit_live (test_basic.BasicTests.test_cli_requires_explicit_live) ... BASIC command failed: ValueError; inspect campaign state and documented arguments
+ok
+test_contract_rejects_generated_policy_overrides (test_basic.BasicTests.test_contract_rejects_generated_policy_overrides) ... ok
+test_crash_recovery_requires_explicit_action (test_basic.BasicTests.test_crash_recovery_requires_explicit_action) ... ok
+test_deadline_stops_without_network (test_basic.BasicTests.test_deadline_stops_without_network) ... ok
+test_duplicate_variants_are_not_executed (test_basic.BasicTests.test_duplicate_variants_are_not_executed) ... ok
+test_full_loop_coverage_lineage_replay_and_export (test_basic.BasicTests.test_full_loop_coverage_lineage_replay_and_export) ... ok
+test_human_criterion_has_no_self_judging (test_basic.BasicTests.test_human_criterion_has_no_self_judging) ... ok
+test_human_template_revision_can_start_a_new_campaign (test_basic.BasicTests.test_human_template_revision_can_start_a_new_campaign) ... ok
+test_invalid_template_bounded (test_basic.BasicTests.test_invalid_template_bounded) ... ok
+test_ledger_rejects_updates (test_basic.BasicTests.test_ledger_rejects_updates) ... ok
+test_mode_and_reinitialization_guard (test_basic.BasicTests.test_mode_and_reinitialization_guard) ... ok
+test_model_observation_is_only_a_candidate (test_basic.BasicTests.test_model_observation_is_only_a_candidate) ... ok
+test_normal_stops_without_candidates (test_basic.BasicTests.test_normal_stops_without_candidates) ... ok
+test_pause_during_response_preserves_evidence (test_basic.BasicTests.test_pause_during_response_preserves_evidence) ... ok
+test_pending_replay_cannot_be_duplicated (test_basic.BasicTests.test_pending_replay_cannot_be_duplicated) ... ok
+test_restart_finishes_pending_without_repeating_calls (test_basic.BasicTests.test_restart_finishes_pending_without_repeating_calls) ... ok
+test_retest_is_new_calls_preserving_old_round (test_basic.BasicTests.test_retest_is_new_calls_preserving_old_round) ... ok
+test_review_cannot_use_another_candidates_evidence (test_basic.BasicTests.test_review_cannot_use_another_candidates_evidence) ... ok
+test_review_requires_evidence_and_keeps_placeholder (test_basic.BasicTests.test_review_requires_evidence_and_keeps_placeholder) ... ok
+test_timeout_is_not_a_candidate (test_basic.BasicTests.test_timeout_is_not_a_candidate) ... ok
+test_unknown_outcome_not_resent (test_basic.BasicTests.test_unknown_outcome_not_resent) ... ok
+test_variant_cannot_change_target_or_multiple_fields (test_basic.BasicTests.test_variant_cannot_change_target_or_multiple_fields) ... ok
+test_cancellation_blocks_new_requests (test_foundation.FoundationTests.test_cancellation_blocks_new_requests) ... ok
+test_compiler_idempotence_and_edit_preservation (test_foundation.FoundationTests.test_compiler_idempotence_and_edit_preservation) ... ok
+test_concurrent_budget_and_restart (test_foundation.FoundationTests.test_concurrent_budget_and_restart) ... ok
+test_control_probe_and_replay_use_fresh_attempts (test_foundation.FoundationTests.test_control_probe_and_replay_use_fresh_attempts) ... ok
+test_empty_run_and_mock_export_rejected (test_foundation.FoundationTests.test_empty_run_and_mock_export_rejected) ... ok
+test_evidence_cannot_be_overwritten (test_foundation.FoundationTests.test_evidence_cannot_be_overwritten) ... ok
+test_invalid_contracts (test_foundation.FoundationTests.test_invalid_contracts) ... ok
+test_live_and_unconfigured_interfaces_fail_closed (test_foundation.FoundationTests.test_live_and_unconfigured_interfaces_fail_closed) ... ok
+test_transport_failure_is_error_not_model_failure (test_foundation.FoundationTests.test_transport_failure_is_error_not_model_failure) ... ok
+test_upstream_verified_is_only_candidate (test_foundation.FoundationTests.test_upstream_verified_is_only_candidate) ... ok
+test_atomic_duplicate_reservation (test_mvp.MVPTests.test_atomic_duplicate_reservation) ... ok
+test_cancel_before_first_dispatch_and_after_close (test_mvp.MVPTests.test_cancel_before_first_dispatch_and_after_close) ... ok
+test_cancel_stops_after_inflight (test_mvp.MVPTests.test_cancel_stops_after_inflight) ... ok
+test_changed_rule_or_spec_replay_rejected (test_mvp.MVPTests.test_changed_rule_or_spec_replay_rejected) ... ok
+test_cli_missing_key_before_request (test_mvp.MVPTests.test_cli_missing_key_before_request) ... Set LLM_NAME and LLM_BASE_URL to the frozen CSCS target
+ok
+test_contract_rejects_missing_extra_and_insufficient_limits (test_mvp.MVPTests.test_contract_rejects_missing_extra_and_insufficient_limits) ... ok
+test_crashed_reservation_recovery_never_resends (test_mvp.MVPTests.test_crashed_reservation_recovery_never_resends) ... ok
+test_deadline_prevents_next_dispatch (test_mvp.MVPTests.test_deadline_prevents_next_dispatch) ... ok
+test_error_stops_no_retry (test_mvp.MVPTests.test_error_stops_no_retry) ... ok
+test_exhausted_budget_survives_reopen (test_mvp.MVPTests.test_exhausted_budget_survives_reopen) ... ok
+test_live_flow_replay_fresh_and_review_export (test_mvp.MVPTests.test_live_flow_replay_fresh_and_review_export) ... ok
+test_no_finding_for_passing_probe_or_failed_control (test_mvp.MVPTests.test_no_finding_for_passing_probe_or_failed_control) ... ok
+test_restart_and_duplicate_phase_never_send (test_mvp.MVPTests.test_restart_and_duplicate_phase_never_send) ... ok
+test_serial_store_lock (test_mvp.MVPTests.test_serial_store_lock) ... ok
+test_storage_failure_halts_dispatch (test_mvp.MVPTests.test_storage_failure_halts_dispatch) ... ok
+test_timeout_and_model_mismatch_are_not_fail (test_mvp.MVPTests.test_timeout_and_model_mismatch_are_not_fail) ... ok
+test_transport_no_redirect_raw_capture_and_secret_discard (test_mvp.MVPTests.test_transport_no_redirect_raw_capture_and_secret_discard) ... ok
+test_wiki_is_candidate_and_stale_is_visible (test_mvp.MVPTests.test_wiki_is_candidate_and_stale_is_visible) ... ok
+test_cancel_finishes_inflight_pair_and_stops (test_parallel_live.PairedParallelTests.test_cancel_finishes_inflight_pair_and_stops) ... ok
+test_control_probe_are_concurrent_and_replay_is_linked (test_parallel_live.PairedParallelTests.test_control_probe_are_concurrent_and_replay_is_linked) ... ok
+test_error_stops_after_inflight_pair_is_saved (test_parallel_live.PairedParallelTests.test_error_stops_after_inflight_pair_is_saved) ... ok
+test_invalid_dispatch_rejected_before_store_start (test_parallel_live.PairedParallelTests.test_invalid_dispatch_rejected_before_store_start) ... ok
+
+----------------------------------------------------------------------
+Ran 56 tests in 68.872s
+
+OK

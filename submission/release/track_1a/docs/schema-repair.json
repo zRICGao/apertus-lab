@@ -1,0 +1,7 @@
+{
+  "source_commit": "7f2382275461baf3fa6c8855d157d86abffe9f0e",
+  "original_sha256": "6f1ef151154578fdabbbc31d3ee2d9738a09e004cefcf37ed97f6527c0717508",
+  "repaired_sha256": "6306485f23fedb6746fe35445a67e608be484bb5686fce8e97462d2134235504",
+  "change": "Escape only the literal newline in topic_area.description; no field/constraint changes",
+  "organizer_approval": "unknown"
+}

@@ -1,0 +1,23 @@
+{
+  "breachweave": {
+    "url": "https://github.com/m-sec-org/BreachWeave.git",
+    "requestedRevision": "4ac5fc4c720ac74cf90968251cfae7cd28d3d62f",
+    "actualRevision": "4ac5fc4c720ac74cf90968251cfae7cd28d3d62f",
+    "path": "workbench/BreachWeave",
+    "basis": "BreachWeave_4ac5fc4_Architecture_Guide.md"
+  },
+  "llmWiki": {
+    "url": "https://github.com/lucasastorian/llmwiki.git",
+    "actualRevision": "aac3e6493306b7fff3b09cb181ca93918e93d0e6",
+    "path": "knowledge/llmwiki",
+    "basis": "README.md and repository HEAD"
+  },
+  "submissionTemplate": {
+    "url": "https://github.com/HackApertus/project-template.git",
+    "actualRevision": "7f2382275461baf3fa6c8855d157d86abffe9f0e",
+    "path": "submission/project-template",
+    "status": "local_schema_syntax_repaired_organizer_compatibility_pending",
+    "schemaSha256": "6F1EF151154578FDABBBC31D3EE2D9738A09E004CEFCF37ED97F6527C0717508",
+    "schemaRepairEvidence": "management/evidence/schema-repair.json"
+  }
+}

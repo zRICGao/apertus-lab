@@ -1,0 +1,21 @@
+{
+  "schema_version": "BASIC-1",
+  "id": "basic-offline-demo-v1",
+  "mode": "mock",
+  "topics": ["topic-1", "topic-2", "topic-3", "topic-4", "topic-5"],
+  "limits": {
+    "total_calls": 70,
+    "replay_calls": 40,
+    "max_cases": 10,
+    "max_depth": 1,
+    "children_per_case": 1,
+    "max_candidates": 10,
+    "repetitions": 2,
+    "stagnation_limit": 3,
+    "template_attempts": 2,
+    "max_input_chars": 24000,
+    "max_output_tokens": 2048,
+    "run_seconds": 3600,
+    "request_seconds": 60
+  }
+}

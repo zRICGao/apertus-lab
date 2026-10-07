@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "enabled": false,
+  "research_model": {
+    "provider": "openai_compatible",
+    "base_url_env": "RESEARCH_LLM_BASE_URL",
+    "model_env": "RESEARCH_LLM_NAME",
+    "api_key_env": "RESEARCH_LLM_API_KEY"
+  },
+  "target": {
+    "model": "swiss-ai/Apertus-v1.5-70B",
+    "endpoint": "https://api.inference.cscs.ch/v1",
+    "api_key_env": "LLM_API_KEY"
+  },
+  "scope": {
+    "target_ids": ["cscs-apertus-v1.5-70b"],
+    "allow_external_assets": false,
+    "allow_publication": false
+  },
+  "limits": {
+    "max_cycles": 1,
+    "max_candidates_per_cycle": 2,
+    "max_target_calls_per_cycle": 18,
+    "max_research_calls_per_cycle": 8,
+    "max_input_chars": 2000,
+    "max_output_tokens": 256,
+    "request_seconds": 30,
+    "cycle_seconds": 1800
+  },
+  "promotion": {
+    "candidate_requires_control": true,
+    "independent_confirmation": true,
+    "human_review_for_finding": true
+  }
+}

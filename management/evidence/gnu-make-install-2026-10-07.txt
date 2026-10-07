@@ -1,0 +1,8 @@
+GNU Make installation evidence (2026-10-07, Europe/Zurich)
+
+Source: conda-forge
+Package: make 4.4.1, build hba3369d_3, win-64
+Environment: C:\Users\gaoch\miniconda3 (base)
+Executable: C:\Users\gaoch\miniconda3\Library\bin\make.exe
+PATH: C:\Users\gaoch\miniconda3\Library\bin was already present in the user's PATH; no PATH edit was needed.
+Verification: Get-Command make resolved to the executable above; `make --version` reported GNU Make 4.4.1, Built for Windows32.

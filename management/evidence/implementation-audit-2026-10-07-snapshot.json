@@ -1,0 +1,226 @@
+{
+  "audit_time_utc": "2026-10-07T16:38:22.558381+00:00",
+  "scope": "read-only implementation audit; no live calls; no secrets inspected",
+  "workspace": {
+    "schema_version": "1.0",
+    "stores": [
+      {
+        "name": "docker-mvp",
+        "status": "verified",
+        "runs": 4
+      },
+      {
+        "name": "development",
+        "status": "not_created"
+      }
+    ],
+    "runs": [
+      {
+        "store": "docker-mvp",
+        "run_id": "run-eb589bee41154e81a50c4ce1102b4ce0",
+        "experiment_id": "multilingual-distraction-demo-v1",
+        "phase": "exploration",
+        "status": "completed",
+        "created_at": "2026-10-07T01:35:55.764444+00:00",
+        "model": "swiss-ai/Apertus-v1.5-70B",
+        "counts": {
+          "pass": 6,
+          "fail": 0,
+          "error": 0,
+          "inconclusive": 0,
+          "pending": 0
+        },
+        "reserved_calls": 6,
+        "unexecuted": 0,
+        "unknown_attempts": 0,
+        "evidence_hash": "119688d4e52e27697c639c3ebf24044fda5d7b0a792bc2d8d2aea710bcd93725",
+        "conclusion": "not_supported",
+        "replay_of": null
+      },
+      {
+        "store": "docker-mvp",
+        "run_id": "run-36ae4ea4ade4440392fe99399debe4ce",
+        "experiment_id": "multilingual-distraction-demo-v1",
+        "phase": "confirmation",
+        "status": "completed",
+        "created_at": "2026-10-07T01:35:57.825209+00:00",
+        "model": "swiss-ai/Apertus-v1.5-70B",
+        "counts": {
+          "pass": 12,
+          "fail": 0,
+          "error": 0,
+          "inconclusive": 0,
+          "pending": 0
+        },
+        "reserved_calls": 12,
+        "unexecuted": 0,
+        "unknown_attempts": 0,
+        "evidence_hash": "7cb91392fd93012870e200bf90e9ed51c00db56fc811817b733af40750c5b5cd",
+        "conclusion": "not_supported",
+        "replay_of": "run-eb589bee41154e81a50c4ce1102b4ce0"
+      },
+      {
+        "store": "docker-mvp",
+        "run_id": "run-9e86c6a7ac774878b8d3934312472b86",
+        "experiment_id": "multilingual-distraction-demo-v1-20261007T162721Z-2de6c1d4a40e",
+        "phase": "exploration",
+        "status": "completed",
+        "created_at": "2026-10-07T16:27:22.007564+00:00",
+        "model": "swiss-ai/Apertus-v1.5-70B",
+        "counts": {
+          "pass": 6,
+          "fail": 0,
+          "error": 0,
+          "inconclusive": 0,
+          "pending": 0
+        },
+        "reserved_calls": 6,
+        "unexecuted": 0,
+        "unknown_attempts": 0,
+        "evidence_hash": "bae24fb3f0a51ef34e04ca7c7b533d42b3b580984b069f82efdcebeec6dfbac6",
+        "conclusion": "not_supported",
+        "replay_of": null
+      },
+      {
+        "store": "docker-mvp",
+        "run_id": "run-36794c100d8145c4916dbfcb68324ad9",
+        "experiment_id": "multilingual-distraction-demo-v1-20261007T162721Z-2de6c1d4a40e",
+        "phase": "confirmation",
+        "status": "completed",
+        "created_at": "2026-10-07T16:27:24.647517+00:00",
+        "model": "swiss-ai/Apertus-v1.5-70B",
+        "counts": {
+          "pass": 12,
+          "fail": 0,
+          "error": 0,
+          "inconclusive": 0,
+          "pending": 0
+        },
+        "reserved_calls": 12,
+        "unexecuted": 0,
+        "unknown_attempts": 0,
+        "evidence_hash": "990e1a04d91a4e2b00e26df01b43df72d5ae4c338302002df3a248bd0c04e08b",
+        "conclusion": "not_supported",
+        "replay_of": "run-9e86c6a7ac774878b8d3934312472b86"
+      }
+    ],
+    "wiki": [
+      {
+        "page": "run-36ae4ea4ade4440392fe99399debe4ce-7cb91392fd93.md",
+        "review_status": "candidate",
+        "scope": {
+          "model": "swiss-ai/Apertus-v1.5-70B",
+          "languages": [
+            "de",
+            "en",
+            "fr"
+          ]
+        },
+        "freshness": "current"
+      },
+      {
+        "page": "run-eb589bee41154e81a50c4ce1102b4ce0-119688d4e52e.md",
+        "review_status": "candidate",
+        "scope": {
+          "model": "swiss-ai/Apertus-v1.5-70B",
+          "languages": [
+            "de",
+            "en",
+            "fr"
+          ]
+        },
+        "freshness": "current"
+      },
+      {
+        "page": "run-pair-7a14c445c851b41d.md",
+        "review_status": "candidate",
+        "scope": {
+          "model": "swiss-ai/Apertus-v1.5-70B",
+          "languages": [
+            "de",
+            "en",
+            "fr"
+          ]
+        },
+        "freshness": "current"
+      }
+    ],
+    "capabilities": {
+      "evidence_view": true,
+      "model_dispatch": false,
+      "research_agent": "unconfigured",
+      "finding_promotion": "human_review_only"
+    }
+  },
+  "tests": {
+    "python_core": {
+      "passed": 58,
+      "seconds": 88.995
+    },
+    "python_workbench": {
+      "passed": 4,
+      "seconds": 4.871
+    },
+    "bun": {
+      "passed": 3,
+      "assertions": 14
+    },
+    "extracted_assets": 4,
+    "isolated_package_smoke": "passed with 18 fixtures; no Docker/live execution"
+  },
+  "source_hashes": {
+    "experiments/src/apertus_lab/__init__.py": "84aa742ee17b8f4440dd08a0625d1733b97d839e29092f0aecb4828fd23d278e",
+    "experiments/src/apertus_lab/basic.py": "f689caf432939bec248a77f0be573d3cd08ef3b5beecf5e7b05fd65057e5cea9",
+    "experiments/src/apertus_lab/basic_cli.py": "27c260e58985df41b065adb9dfa098bf4d7a62b4606c45ab5054cac3f86430ee",
+    "experiments/src/apertus_lab/basic_contracts.py": "b499e2f5455d1ad957b067837866dac07943687e2a4d95ddf10920bf7941c9b5",
+    "experiments/src/apertus_lab/basic_store.py": "d2a53e05ac454ee49614577d6225fe1dc0010829d3632db7f61f29064d50f083",
+    "experiments/src/apertus_lab/cli.py": "8a487acd2cfa81f6eba7729a097a27a3949582bea228b1facea8aebfed6b03f5",
+    "experiments/src/apertus_lab/contracts.py": "81cb3fb04ca621a444e06cbb763f42ec43b204b3446915ed844624a9926e4044",
+    "experiments/src/apertus_lab/engine.py": "ff1d6b1dffeb0d43f9963d202253582a0a75140f37820cc3baffa6d3a6ceaeff",
+    "experiments/src/apertus_lab/findings.py": "a60ef771b97cdb7635db732171a0574adbc5e51968846758ec7c6c8b8ca96783",
+    "experiments/src/apertus_lab/knowledge.py": "364234d8b85217fb67b0b8aee95e131cae062b71490fc06aeaa095b762d8d52e",
+    "experiments/src/apertus_lab/live.py": "0309bd25f2a5cc9540510393c8c8a32a6e1b2f229f0c4d8799ec53d3c9d55059",
+    "experiments/src/apertus_lab/live_contracts.py": "a799922daca3aefbe00871418d8348aae34a7feb68b2d0458884186119ed99b6",
+    "experiments/src/apertus_lab/live_store.py": "4919dc5307e730d9b12f5ccdb5873afaa5386131fd73b8a9cf346eda4f875511",
+    "experiments/src/apertus_lab/live_transport.py": "72be3e9e27ca1d46421d6f0b9aabe1b8f0154acdab8507025bf7a9cae745777b",
+    "experiments/src/apertus_lab/mvp_cli.py": "e11bf0638bdd96f47459403abe0eb393b5584a8f0625e88022a020666cd1be81",
+    "experiments/src/apertus_lab/parallel_live.py": "b40a9e2c43f1bb751da8a91c484ea52b46ee421b5154f10a12b043f6f1d13f8f",
+    "experiments/src/apertus_lab/ports.py": "b090cfe25fb9c2d36feac96c3442b8315a29d668497dc5e56e5d5e888dd106ac",
+    "experiments/src/apertus_lab/reproduce.py": "69193893d1c49ea3ed281e69136ec72f17ecb8acdd0060769fed3fb7cf5b9c16",
+    "experiments/src/apertus_lab/review.py": "a9f89e1f028fa58bbe80e4636006590b3ff02e82bf2e2af6ebdbf302e4a7e582",
+    "experiments/src/apertus_lab/runtime_adapter.py": "7a7b2a53f7bdd93fe05a64275878886e78825d1f160ab42335055f592ff87d5f",
+    "experiments/src/apertus_lab/store.py": "25c40125eeabcec52663a307e37ba204bb5d63fc8a5161e1f7b0e2d4f8cfe2b6",
+    "workbench/apertus-workbench/local_lab.py": "c905cb61ca886bda715d4fe0e224e0796a76680cfae43e59757acb2332b77311",
+    "scripts/build-mvp-release.py": "4786acabc812713422b0e06fe61430e5c7d09c187620bcdec3aa5f6956ead51c",
+    "Makefile": "e70b44031488e06b84f39060277f102f4944e6b5674adba9f413098f74d68732"
+  },
+  "registered_reviews": 0,
+  "basic_campaigns": [
+    {
+      "path": "experiments/runs/basic-acceptance-2026-10-07/basic.sqlite3",
+      "mode": "mock",
+      "status": "completed",
+      "counts": {
+        "other": 26,
+        "replay": 40,
+        "total": 66
+      },
+      "cases": 10,
+      "candidates": 10,
+      "history_rows": 200,
+      "db_bytes": 13090816
+    }
+  ],
+  "release": {
+    "initial_manifest_mismatches": [
+      "track_1a/Makefile",
+      "track_1a/README.md",
+      "track_1a/src/apertus_lab/reproduce.py"
+    ],
+    "composed_manifest_mismatches": [],
+    "overlay_binds_initial": true,
+    "finding_files": 0,
+    "pdf_files": 0,
+    "data_bytes": 2327
+  }
+}

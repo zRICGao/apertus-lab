@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "stores": {
+    "docker-mvp": "submission/release/track_1a/output",
+    "development": "experiments/runs/mvp"
+  },
+  "wiki_workspace": "experiments/wiki-workspace",
+  "runtime_state": "experiments/runtime-state",
+  "wiki_application": "knowledge/llmwiki"
+}

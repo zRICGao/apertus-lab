@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+**/node_modules/
+**/__pycache__/
+*.log
+experiments/results/
+experiments/secrets/
+**/.venv/
+**/.llmwiki/
+experiments/runs/
+experiments/runtime-state/
+**/.pytest_cache/
+**/.ruff_cache/
+**/*.egg-info/

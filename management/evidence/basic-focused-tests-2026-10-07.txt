@@ -1,0 +1,30 @@
+test_budget_preserves_replay (test_basic.BasicTests.test_budget_preserves_replay) ... ok
+test_cancel_is_terminal (test_basic.BasicTests.test_cancel_is_terminal) ... ok
+test_cli_requires_explicit_live (test_basic.BasicTests.test_cli_requires_explicit_live) ... BASIC command failed: ValueError; inspect campaign state and documented arguments
+ok
+test_contract_rejects_generated_policy_overrides (test_basic.BasicTests.test_contract_rejects_generated_policy_overrides) ... ok
+test_crash_recovery_requires_explicit_action (test_basic.BasicTests.test_crash_recovery_requires_explicit_action) ... ok
+test_deadline_stops_without_network (test_basic.BasicTests.test_deadline_stops_without_network) ... ok
+test_duplicate_variants_are_not_executed (test_basic.BasicTests.test_duplicate_variants_are_not_executed) ... ok
+test_full_loop_coverage_lineage_replay_and_export (test_basic.BasicTests.test_full_loop_coverage_lineage_replay_and_export) ... ok
+test_human_criterion_has_no_self_judging (test_basic.BasicTests.test_human_criterion_has_no_self_judging) ... ok
+test_human_template_revision_can_start_a_new_campaign (test_basic.BasicTests.test_human_template_revision_can_start_a_new_campaign) ... ok
+test_invalid_template_bounded (test_basic.BasicTests.test_invalid_template_bounded) ... ok
+test_ledger_rejects_updates (test_basic.BasicTests.test_ledger_rejects_updates) ... ok
+test_mode_and_reinitialization_guard (test_basic.BasicTests.test_mode_and_reinitialization_guard) ... ok
+test_model_observation_is_only_a_candidate (test_basic.BasicTests.test_model_observation_is_only_a_candidate) ... ok
+test_normal_stops_without_candidates (test_basic.BasicTests.test_normal_stops_without_candidates) ... ok
+test_pause_during_response_preserves_evidence (test_basic.BasicTests.test_pause_during_response_preserves_evidence) ... ok
+test_pending_replay_cannot_be_duplicated (test_basic.BasicTests.test_pending_replay_cannot_be_duplicated) ... ok
+test_restart_finishes_pending_without_repeating_calls (test_basic.BasicTests.test_restart_finishes_pending_without_repeating_calls) ... ok
+test_retest_is_new_calls_preserving_old_round (test_basic.BasicTests.test_retest_is_new_calls_preserving_old_round) ... ok
+test_review_cannot_use_another_candidates_evidence (test_basic.BasicTests.test_review_cannot_use_another_candidates_evidence) ... ok
+test_review_requires_evidence_and_keeps_placeholder (test_basic.BasicTests.test_review_requires_evidence_and_keeps_placeholder) ... ok
+test_timeout_is_not_a_candidate (test_basic.BasicTests.test_timeout_is_not_a_candidate) ... ok
+test_unknown_outcome_not_resent (test_basic.BasicTests.test_unknown_outcome_not_resent) ... ok
+test_variant_cannot_change_target_or_multiple_fields (test_basic.BasicTests.test_variant_cannot_change_target_or_multiple_fields) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 63.890s
+
+OK

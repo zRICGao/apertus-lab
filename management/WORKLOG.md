@@ -101,3 +101,11 @@
 - 直接只读验证真实账本：4run、36次均pass，两组not_supported，reviews=0；BASIC持久示例为mock。发布初始manifest3文件变化均有local-update覆盖，组合哈希通过。
 - 58核心Python、4工作台Python、3Bun（14 assertions）、4提取资产和隔离发布smoke通过。未调用真实模型、未读取.env秘密、未修改实现或子仓库。
 - 保存implementation-audit-2026-10-07.md与机器快照，按已实现、未完成/缺结构、改进、落地分级及1A/2B偏差编写。主要建议是候选冻结桥接、可信领域评价、研究证据和最终包验收。
+# 2026-10-08：上传至 Prototype 团队私密仓库
+
+- 用户修正目标仓库为 `https://github.com/zRICGao/Prototype` 并授权上传。
+- 核对远端 main 只有初始 README 提交；以该提交为父提交创建项目提交并快进推送，没有强制推送。
+- 上传源码、文档、发布包及已确认可共享的运行证据；排除 `.env`、Wiki 索引缓存和 `live.lock`。
+- 补全官方模板和 Track 2B gitlink 的 `.gitmodules` 来源。BreachWeave 子模块的本地删除保留未提交状态，未进入远端 gitlink。
+- 推送提交 `50793de291fd4e03cfae7ee103ce4e928b0d28c2` 成功；未运行测试。细节见 `evidence/private-repo-upload-2026-10-08.md`。
+

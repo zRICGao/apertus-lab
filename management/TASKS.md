@@ -35,3 +35,4 @@
 | CFG002 | P3/P6 | 本地 `.env` 持久配置与 Make 自动加载 | CFG001 | done（模板/接线） | 根 `.env` 已忽略并留空 key；`.env.example` 有模型/endpoint默认值；根及发布包 Makefile 自动读取；dry-run 展开验证，不含有效 key |
 | CFG003 | P3/P6 | Make 自动生成独立实验 ID 与配置快照 | CFG002 | done（实现/离线） | 2 新增 + 18 MVP 检查通过；auto 新 ID、重复 ID 拦截、完整 spec 哈希；evidence/auto-experiment-id-2026-10-07.md |
 | V002 | 审查 | 当前实现、缺失结构、落地与赛道偏差报告 | 当前工作区/真实账本 | done | evidence/implementation-audit-2026-10-07.md及snapshot；58+4 Python、3 Bun、资产/隔离包复验通过 |
+| PUB001 | 交付 | 上传项目到团队私密仓库 | 用户确认目标与共享范围 | done | Prototype/main 快进至 `50793de`；未纳入 `.env`、缓存和运行锁；evidence/private-repo-upload-2026-10-08.md |

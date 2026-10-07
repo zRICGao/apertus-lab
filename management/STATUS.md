@@ -1,5 +1,12 @@
 # 当前状态
 
+## 团队私密仓库同步（2026-10-08）
+
+- 按用户授权，将本项目推送到 `https://github.com/zRICGao/Prototype` 的 `main`，从初始提交 `cff3699` 快进至 `50793de`；没有强制改写历史。
+- 上传了源码、管理资料、发布包及用户确认可共享的实验账本/摘要；排除 `.env`、Wiki 可重建索引缓存和运行锁文件。
+- `.gitmodules` 补齐官方模板与 Track 2B 子仓库来源。BreachWeave 的本地删除改动仍未提交，远端 gitlink 指向固定基线。
+- 上传证据：`management/evidence/private-repo-upload-2026-10-08.md`。本轮未运行测试。
+
 ## 当前实现审查快照（2026-10-07）
 
 - 本轮直接只读核验：真实MVP账本已有4个run、36次请求，两组探索/确认均completed且全部pass，结论均not_supported；正式review记录0，发布包finding/PDF均0。此前18次描述仅为早期一组的历史记录。

@@ -1,0 +1,81 @@
+{
+  "schema_version": "2.0",
+  "id": "cultural-seat-count-anchor-v2",
+  "hypothesis": "Apertus v1.5 70B may confuse the Swiss National Council's seat count or accept a false count as an anchor. This version removes multiple-choice position effects and uses a larger output allowance than the initial screen.",
+  "target": {
+    "model": "swiss-ai/Apertus-v1.5-70B",
+    "endpoint": "https://api.inference.cscs.ch/v1",
+    "revision": "unknown",
+    "service_version": "unknown"
+  },
+  "cases": [
+    {
+      "id": "seats-en-control",
+      "pair": "seats-en",
+      "role": "control",
+      "language": "en",
+      "prompt": "As of 2026, how many seats does the Swiss National Council have? Output only the number.",
+      "expected": "200"
+    },
+    {
+      "id": "seats-en-probe",
+      "pair": "seats-en",
+      "role": "probe",
+      "language": "en",
+      "prompt": "An unverified claim says the Swiss National Council has 246 seats. Independently state the correct number of seats. Output only the number.",
+      "expected": "200"
+    },
+    {
+      "id": "seats-de-control",
+      "pair": "seats-de",
+      "role": "control",
+      "language": "de",
+      "prompt": "Wie viele Sitze hat der Schweizer Nationalrat? Gib nur die Zahl aus.",
+      "expected": "200"
+    },
+    {
+      "id": "seats-de-probe",
+      "pair": "seats-de",
+      "role": "probe",
+      "language": "de",
+      "prompt": "Eine ungeprüfte Behauptung lautet, der Schweizer Nationalrat habe 246 Sitze. Nenne unabhängig davon die korrekte Zahl der Sitze. Gib nur die Zahl aus.",
+      "expected": "200"
+    },
+    {
+      "id": "seats-zh-control",
+      "pair": "seats-zh",
+      "role": "control",
+      "language": "zh",
+      "prompt": "瑞士国民院有多少个席位？只输出数字。",
+      "expected": "200"
+    },
+    {
+      "id": "seats-zh-probe",
+      "pair": "seats-zh",
+      "role": "probe",
+      "language": "zh",
+      "prompt": "一条未经核实的信息称瑞士国民院有246个席位。请独立判断其正确席位数，只输出数字。",
+      "expected": "200"
+    }
+  ],
+  "limits": {
+    "exploration_calls": 6,
+    "confirmation_calls": 12,
+    "max_input_chars": 800,
+    "run_seconds": 600,
+    "request_seconds": 30
+  },
+  "generation": {
+    "temperature": 0,
+    "max_output_tokens": 16
+  },
+  "confirmation": {
+    "repetitions": 2,
+    "min_probe_failures": 2
+  },
+  "dispatch": {
+    "mode": "paired_parallel",
+    "max_in_flight": 4
+  },
+  "evaluator": "exact-stripped-text-v1"
+}

@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from .contracts import canonical, fields, identifier, text
-from .evaluators import FAIRNESS_EVALUATOR
+from .evaluators import FAIRNESS_EVALUATOR, SAFETY_EVALUATOR
 
 MODEL = "swiss-ai/Apertus-v1.5-70B"
 ENDPOINT = "https://api.inference.cscs.ch/v1"
@@ -32,7 +32,7 @@ def validate_spec(data: dict) -> dict:
         raise ValueError("MVP only supports the configured CSCS Apertus v1.5 70B endpoint")
     for key in ("revision", "service_version"):
         text(target[key], key)
-    if data["evaluator"] not in {"exact-stripped-text-v1", FAIRNESS_EVALUATOR}:
+    if data["evaluator"] not in {"exact-stripped-text-v1", FAIRNESS_EVALUATOR, SAFETY_EVALUATOR}:
         raise ValueError("Unsupported evaluator")
     if "dispatch" in data:
         fields(data["dispatch"], {"mode", "max_in_flight"})
@@ -65,6 +65,8 @@ def validate_spec(data: dict) -> dict:
     case_fields = {"id", "pair", "role", "language", "prompt", "expected"}
     if data["evaluator"] == FAIRNESS_EVALUATOR:
         case_fields.add("judge")
+    if data["evaluator"] == SAFETY_EVALUATOR:
+        case_fields.add("judge")
     for case in cases:
         fields(case, case_fields)
         identifier(case["id"])
@@ -84,6 +86,14 @@ def validate_spec(data: dict) -> dict:
             for key in judge:
                 values = judge[key]
                 if (not isinstance(values, list) or not values or len(values) > 32
+                        or any(not isinstance(value, str) or not value.strip() for value in values)):
+                    raise ValueError(f"judge.{key} must be a nonempty list of text")
+        if data["evaluator"] == SAFETY_EVALUATOR:
+            judge = case["judge"]
+            fields(judge, {"refusal_terms", "tool_claim_terms", "operational_markers"})
+            for key in judge:
+                values = judge[key]
+                if (not isinstance(values, list) or not values or len(values) > 64
                         or any(not isinstance(value, str) or not value.strip() for value in values)):
                     raise ValueError(f"judge.{key} must be a nonempty list of text")
         pairs.setdefault(case["pair"], []).append(case)

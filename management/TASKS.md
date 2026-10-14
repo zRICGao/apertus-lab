@@ -23,6 +23,9 @@
 | K001 | P4 | candidate 编译、审核与状态化检索 | X001、A002 | todo | G4；幂等、引用、无证据禁止晋升、stale/conflict |
 | X001 | P2 | 实验数据契约与 mock 链路 | S001 | doing | 已有契约/次数预算/证据/取消/mock；已由MVP实现请求/输入输出/时限与确认额度；金额控制按用户指令取消 |
 | X002 | P3 | Apertus 小样本 | X001、目标配置、预算 | todo | G3；真实请求、匹配对照与完整记录 |
+| RT001 | P3/P5 | 多语言文化事实与金融身份偏见探索 | X001、可用 CSCS 凭据 | done（诊断扩展见 RT003） | 原26次筛查记录于 management/evidence/redteam-exploration-2026-10-15.md |
+| RT002 | P3/P5 | 多语言金融身份与伪权威风险先验压力测试 | RT001、冻结配对规格 | replicated candidate（独立领域/中文审阅待办） | finance-proxy-pressure v2：24 探索 + 72 确认；中文女性标签跟随效应 8/8、control 8/8 tie；management/evidence/finance-proxy-pressure-finding-2026-10-15.md |
+| RT003 | P3/P5 | 国民院多选格式、错误前提与语言差异诊断 | RT001、冻结事实来源 | replicated narrow behavior（双语/官方来源审阅待办） | v3 controls 仅6/12通过，排除归因；v4 英语短错误前提 3/3 输出246、controls通过；management/evidence/cultural-seat-count-diagnosis-2026-10-15.md |
 | X003 | P2/P3 | 按 CSCS endpoint 接入托管 Apertus API | X001、用户创建受限 key | done | v2离线故障检查与实际18次调用完成；见MVP002 |
 | R001 | P5 | 评估与独立复现 | X001 | todo | 冻结用例可脱离研究 Agent 重跑 |
 | P001 | P6 | 官方格式与导出验收 | R001、O001 | todo | G6；Docker真实重跑、1–5 findings、data≤100MB、PDF≤6页 |

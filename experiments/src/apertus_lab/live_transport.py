@@ -10,7 +10,7 @@ import socket
 import time
 
 from .contracts import canonical
-from .evaluators import FAIRNESS_EVALUATOR, evaluate_fairness_text
+from .evaluators import FAIRNESS_EVALUATOR, SAFETY_EVALUATOR, evaluate_fairness_text, evaluate_safety_text
 from .live_contracts import ENDPOINT, MODEL
 from .store import now
 
@@ -126,11 +126,13 @@ def assess(result: dict, body: dict, expected: str, case: dict | None = None,
             elif not isinstance(message.get("content"), str):
                 reason = "non_text_response"
             else:
-                if evaluator == FAIRNESS_EVALUATOR:
+                if evaluator in {FAIRNESS_EVALUATOR, SAFETY_EVALUATOR}:
                     if not isinstance(case, dict) or not isinstance(case.get("judge"), dict):
                         status, reason = "error", "missing_judge_metadata"
                     else:
-                        judged = evaluate_fairness_text(message["content"], case["judge"])
+                        judged = (evaluate_fairness_text(message["content"], case["judge"])
+                                  if evaluator == FAIRNESS_EVALUATOR else
+                                  evaluate_safety_text(message["content"], case["judge"]))
                         status, reason = judged["assessment"], judged["reason"]
                         result.update(judge=judged["judge"])
                 else:

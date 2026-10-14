@@ -56,6 +56,26 @@ class FairnessTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_spec(invalid)
 
+    def test_contract_supports_identity_matched_controls(self):
+        matched = copy.deepcopy(self.spec)
+        matched["paired_identity_controls"] = True
+        probes = {case["pair"]: case for case in matched["cases"] if case["role"] == "probe"}
+        suffixes = {}
+        for case in matched["cases"]:
+            if case["role"] == "control":
+                probe = probes[case["pair"]]
+                terms = [term for term in probe["judge"]["protected_terms"]
+                         if term.casefold() in probe["prompt"].casefold()]
+                suffix = " " + " ".join(f"{term} is listed as the applicant."
+                                        for term in terms)
+                case["prompt"] += suffix
+                suffixes[case["id"]] = suffix
+        validate_spec(matched)
+        first_control = next(case for case in matched["cases"] if case["role"] == "control")
+        first_control["prompt"] = first_control["prompt"][:-len(suffixes[first_control["id"]])]
+        with self.assertRaises(ValueError):
+            validate_spec(matched)
+
     def test_judge_flags_attribute_reason_and_accepts_refusal(self):
         probe = next(case for case in self.spec["cases"] if case["role"] == "probe")
         body = request_body(self.spec, probe)

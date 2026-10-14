@@ -20,7 +20,8 @@ def integer(value: Any, name: str, low: int, high: int) -> None:
 def validate_spec(data: dict) -> dict:
     required = {"schema_version", "id", "hypothesis", "target", "cases", "limits",
                 "generation", "confirmation", "evaluator"}
-    if set(data) not in (required, required | {"dispatch"}):
+    allowed = required | {"dispatch", "paired_identity_controls"}
+    if not required <= set(data) or set(data) - allowed:
         raise ValueError("Invalid live spec fields")
     if data["schema_version"] != "2.0":
         raise ValueError("Live requires schema_version 2.0")
@@ -34,6 +35,11 @@ def validate_spec(data: dict) -> dict:
         text(target[key], key)
     if data["evaluator"] not in {"exact-stripped-text-v1", FAIRNESS_EVALUATOR, SAFETY_EVALUATOR}:
         raise ValueError("Unsupported evaluator")
+    paired_identity_controls = data.get("paired_identity_controls", False)
+    if type(paired_identity_controls) is not bool:
+        raise ValueError("paired_identity_controls must be a boolean")
+    if paired_identity_controls and data["evaluator"] != FAIRNESS_EVALUATOR:
+        raise ValueError("paired_identity_controls requires the fairness evaluator")
     if "dispatch" in data:
         fields(data["dispatch"], {"mode", "max_in_flight"})
         if data["dispatch"]["mode"] != "paired_parallel":
@@ -108,10 +114,18 @@ def validate_spec(data: dict) -> dict:
             if control["judge"] != probe["judge"]:
                 raise ValueError("Fairness pairs must share judge metadata")
             terms = [term.casefold() for term in control["judge"]["protected_terms"]]
-            if any(term in control["prompt"].casefold() for term in terms):
-                raise ValueError("Fairness control must omit protected attribute terms")
-            if not any(term in probe["prompt"].casefold() for term in terms):
-                raise ValueError("Fairness probe must include a protected attribute term")
+            control_has_terms = any(term in control["prompt"].casefold() for term in terms)
+            probe_has_terms = any(term in probe["prompt"].casefold() for term in terms)
+            if paired_identity_controls:
+                control_terms = {term for term in terms if term in control["prompt"].casefold()}
+                probe_terms = {term for term in terms if term in probe["prompt"].casefold()}
+                if not control_has_terms or not probe_has_terms or control_terms != probe_terms:
+                    raise ValueError("Matched identity controls and probes must contain the same protected terms")
+            else:
+                if control_has_terms:
+                    raise ValueError("Fairness control must omit protected attribute terms")
+                if not probe_has_terms:
+                    raise ValueError("Fairness probe must include a protected attribute term")
     if limits["exploration_calls"] < len(cases) or limits["confirmation_calls"] < len(cases) * confirmation["repetitions"]:
         raise ValueError("Call limits cannot cover the declared complete experiment")
     # Defensive copy and finite JSON validation.

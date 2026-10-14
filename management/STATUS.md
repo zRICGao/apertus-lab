@@ -8,7 +8,8 @@
 - 证据记录和限制见 `management/evidence/medical-triage-proxy-2026-10-15.md` 与 `management/evidence/finance-proxy-crosslingual-2026-10-15.md`。医疗 pilot v1 因决策方向不清、理由矛盾和德语 JSON 键漂移而作废，不用于发现结论。
 - 尚未完成英/德/中文母语者、临床分诊与金融领域独立审阅；hosted service 未暴露模型 revision。以上结果不可用于真实医疗/信贷决策，也不能外推成真实伤害或系统级风险结论。
 - 离线验证：`experiments` 下 70 项 unittest 全部通过；医疗 v2 与方向规格均通过 `validate-live`（仅本地校验，无网络请求）；`git diff --check` 通过。提交为 `fa73884`，包含本轮代码、冻结规格与报告。
-- GitHub 尚未推送：本地 `main` 在本轮提交前已比 `origin/main` 多 9 个提交，现多 10 个。实时 `fetch` 和 GCM OAuth 登录均在无输出状态下挂起并被终止，故没有验证远端 tip 或完成 bobhelium 授权。此前授权范围提到两个已审查提交；不能在远端和提交范围未核实的情况下推送整个 10 提交队列。待网络/OAuth 可用并明确待推提交范围后再进行快进推送。
+- GitHub 推送已完成：先通过命令级 `http.proxy=http://127.0.0.1:7897` 完成 GCM 浏览器 OAuth，账号为 `bobhelium`；随后实时核对远端 `main` 为 `8aff6f7`，确认本地 11 个提交是其严格后继，再快进推送至 `4d116f8`。推送后重新 fetch，`HEAD` 与 `origin/main` 均为 `4d116f8ce5ab57d94d3400064c7c4a0f40952457`。
+- 上一轮失败根因：全局 Git 配置把 `http.proxy` 设为 `socks5://127.0.0.1:7897`。curl 可以使用 SOCKS5，但 Git Credential Manager 的 .NET `ServicePointManager` 不支持该方案，返回“ServicePointManager 不支持具有 socks5 方案的代理”；同时没有已保存的 GitHub 账号，认证命令因此无输出挂起。命令级 HTTP 代理解决了网络栈兼容问题，没有修改全局代理配置，也没有强制推送。
 - 运行数据库、原始响应、日志及本地凭据均留在仓库外或本机忽略文件；`.env` 被 Git 忽略，未进入提交。
 
 ## 金融风险身份代理压力测试（2026-10-15）

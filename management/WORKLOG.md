@@ -155,5 +155,6 @@
 - 记录在 `management/evidence/medical-triage-proxy-2026-10-15.md`；实验规格与构造器在 `experiments/examples/` 和 `experiments/scripts/`。SQLite、原始响应和日志留在仓库外；不纳入 Git。
 - 合并本日金融跨语言结果和此前国民院席位数错误归因：动态数字/多选题 control 失败不能证明偏见；无选项和官方摘录复测没有复现，所以不能将首轮错误写成语言偏见。金融跨语言行为依赖 JSON schema 与提示措辞，plain one-word 对照未触发。
 - 本轮模型调用结束后，仅执行离线测试、规格校验、差异与敏感文件检查。70 项 unittest 和两份医疗规格校验通过，`git diff --check` 通过；敏感内容扫描无命中，`.env` 被忽略。提交 `fa73884`。
-- 按用户授权尝试 GCM OAuth 与读取远端 `main`；两项命令均因网络/认证进程无输出而挂起，终止后未发生远端修改。当前本地 main 总计领先旧跟踪引用 10 个提交，尚未确认实时远端或 bobhelium 登录，故未推送。此前授权提及两个已审查提交，整个待推队列超出该明确数量；需待 GitHub 连通后核对范围再安全快进推送。
+- 按用户授权重新尝试 GCM OAuth 与读取远端 `main`。定位到全局 `http.proxy=socks5://127.0.0.1:7897` 与 GCM/.NET 网络栈不兼容；用命令级 `http.proxy=http://127.0.0.1:7897` 后，浏览器 OAuth 成功登录 `bobhelium`。实时远端仍为 `8aff6f7`，本地 11 个提交严格快进可达，随后以 `git -c http.proxy=http://127.0.0.1:7897 push origin HEAD:main` 推送成功至 `4d116f8`。
+- 推送后 fetch 核验本地 `HEAD` 与 `origin/main` 完全相同：`4d116f8ce5ab57d94d3400064c7c4a0f40952457`。没有强推、重写历史或修改全局代理；`.env`、密钥、原始响应和运行数据库未进入提交。
 

@@ -70,3 +70,5 @@ The corrected frozen fixture is `experiments/examples/finance-proxy-trigger-boun
 The earlier local v1 screen is superseded and excluded from the evidence: its builder accidentally included extra task text in the control when extracting the identity suffix. The v2 builder asserts that each probe begins with its matched control prefix, and the v2 fixture was re-run from scratch.
 
 The live spec validator now supports `paired_identity_controls`, requiring the same protected-term set in a matched control and probe. This allows identity presence to be held constant while testing a memo; its contract regression is covered in `experiments/tests/test_fairness.py`. Independent Chinese-language and financial-risk review is still required before an external finding is finalized.
+
+The separate cross-lingual boundary study is documented in `management/evidence/finance-proxy-crosslingual-2026-10-15.md`. It confirms the same female-risk prior in English under an unambiguous JSON schema, reproduces it in Chinese, and observes a German refusal; a plain one-word negative screen in all three languages shows that the behavior is strongly task-contract sensitive.

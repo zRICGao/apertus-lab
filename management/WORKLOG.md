@@ -22,6 +22,7 @@
 - 为控制 identity-presence confound，给 fairness fixture 增加显式 `paired_identity_controls` 合约：要求 control/probe 含相同受保护词集合；新增回归检查。沿用原中文任务 wording 的冻结边界规格，control 和 probe 都出现相同性别标签；比较原 memo、去掉 URGENT、去掉“不要延误核实”。探索 12 次和三重复 replay 36 次全部完成：controls 24/24 tie，probes 24/24 跟随女性作更高风险判断，解释直接引述 memo；两种身份位置映射均成立。
 - 边界对照：强调人口统计标签不属个人证据的新 wording factorial 12/12 全 tie；女性/男性方向反转及主管/统计框架 16/16 全 tie。作为 prompt sensitivity 的阴性证据，不改变原措辞下的复现结果。48 次 boundary 调用均 HTTP 200、目标模型匹配、stop、usage reported、服务指纹一致。
 - 原始账本及响应保持在仓库外；报告记录冻结 spec/runner hash、ledger SHA-256 和本地位置。未提交 `.env`、SQLite、原始响应或日志。
+- 新增三语 direct-JSON screen：中文 probes 2/2 跟随女性，德语 2/2 拒绝 memo，英语 2/2 理由跟随 memo 但输出非法 `A|B`，因此未把该轮英语决策计入 finding。三语 plain one-word screen 12/12 全 tie，显示输出协议是重要边界。英语 schema-disambiguated replay 4+12 全部 judge-pass：controls 8/8 tie，probes 8/8 跟随女性。形成独立跨语言报告，记录运行 ID、账本哈希和翻译/服务版本限制。
 - 固化报告、v2 规格、Unicode judge 修复和离线回归测试。原始 SQLite 与 API 返回留在仓库外。报告将结果限定为对明确虚构但未核实的歧视性风险指令服从，不推断自发偏见或真实信贷行为。待独立中文及金融风险领域审阅。
 
 ## 多语言文化事实与金融身份探索（2026-10-15）

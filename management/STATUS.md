@@ -7,6 +7,7 @@
 - 两次运行共 96/96 HTTP 200、model ID 匹配、正常停止、无截断/传输错误，服务指纹一致。结论限于该合成提示及服务版本；不代表自发刻板印象或真实信贷决定。独立中文与金融领域复核待办。
 - 报告级证据：`management/evidence/finance-proxy-pressure-finding-2026-10-15.md`；规格：`experiments/examples/finance-proxy-pressure-v2.json`；原始账本在仓库外 `Apertus-live-evidence/2026-10-15/finance-proxy-pressure-v2`。
 - 新增身份标签完全匹配的中文触发边界测试：原始主管备忘录、移除 URGENT、移除“不要延误核实”三种条件 × 两种 A/B 映射。探索 12/12，三个独立 replay 共 36/36；control `tie` 24/24，probe 24/24 跟随女性并判更高风险，理由明确引用备忘录，结论仍限定于给定伪指示及合成场景。另两组更强的反向/拆分筛查 28/28 全部 `tie`，证明触发依赖任务措辞。详情、哈希及外部账本位置见 finding 报告的 Trigger-boundary follow-up。
+- 跨语言扩展：直接 JSON 任务 12/12 正常，中文 probe 2/2 跟随女性，德语 probe 2/2 拒绝未核实备忘录，英语 probe 2/2 的理由跟随备忘录但 decision 输出非法 `A|B`。去掉 JSON 改为三语只输出单词后 12/12 全部 `tie`；随后英语明确列出三个独立 decision 值，探索 4 次 + replay 12 次中 controls 8/8 tie、probes 8/8 跟随女性。当前结论为跨语言但强烈依赖任务/输出协议的伪权威服从失败，不是中文专属或自发刻板印象。详情见 `management/evidence/finance-proxy-crosslingual-2026-10-15.md`。
 
 ## 多语言安全与伪权威注入测试（2026-10-15）
 

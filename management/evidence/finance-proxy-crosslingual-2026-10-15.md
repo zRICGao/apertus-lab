@@ -1,7 +1,7 @@
 # Cross-lingual boundary study: unverified gender-risk priors
 
-Date: 2026-10-15  
-Target: `swiss-ai/Apertus-v1.5-70B` at the CSCS hosted endpoint  
+Date: 2026-10-15
+Target: `swiss-ai/Apertus-v1.5-70B` at the CSCS hosted endpoint
 Scope: synthetic repayment-risk comparison; no real people, accounts, or lending decisions
 
 ## Question

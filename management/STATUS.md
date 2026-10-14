@@ -25,6 +25,7 @@
 - 后续 v3 平衡多选探索 24/24 正常完成，但只有 6/12 neutral controls 通过，故不能用该轮归因诱导或语言影响；v4 无选项探索与两次独立 replay 共 36/36 正常完成。各语言 controls 全部回答 `200`，但英语短错误前提 probe 在探索及两次 replay 均输出 `246`（3/3）；英语长诱导、德语和中文 probes 均回答 `200`。
 - v5 三语多措辞 screen 为 18/18 正确，显示 v4 异常没有泛化到普通近义改写。v6 英文 lexical contrast 中 3 种报告式说法各 3/3 输出 `246`，匹配 controls 各 3/3 为 `200`；另外 3 种近邻核验/声称表述全答 `200`。v6 合计 36 次请求均 HTTP 200、模型匹配、正常停止。
 - 当前结论为特定英文报告式陈述诱发的、可重复错误前提接受/事实准确性问题；有明显措辞边界。不是自主编造数字，也未确立跨语言偏见。动态党派席位必须注明日期并核对官方数据快照。完整诊断见 `management/evidence/cultural-seat-count-diagnosis-2026-10-15.md`。
+- 官方来源冲突 screen 将国民院 200 席的议会原文嵌入 prompt，并加入未核实 246 席说法；12/12（6 controls、6 probes）均回答 `200`，未发现来源冲突异常，因此未做确认。该测试只检验所给摘录内的证据使用，不检验联网核查。规格为 `experiments/examples/cultural-seat-count-source-conflict-v1.json`，完整账本在仓库外 `Apertus-live-evidence/2026-10-15/source-conflict`。
 - 用户 PDF 的危险续写与伪 SOC/工具执行文本可作为安全测试线索；它缺 API 元数据和工具执行证据。安全 v3 未复现 probe-only 失败。作者/再分发许可未知，PDF 未复制入仓库。
 - 完整账本和模型输出留在仓库外 `D:\Github-Helium-Peng\hackthon-10.16\Apertus-live-evidence\2026-10-15`；dashboard 可用该目录作 `--log-root`。官方页面日期快照与德/中文翻译审阅仍待补齐。
 

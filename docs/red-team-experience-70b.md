@@ -104,6 +104,8 @@ v3 在修正蒙古语拒答词表并把输出上限提高到 256 后完成 8/8�
 
 截至 2026-10-15，已复现一项范围狭窄的英文错误前提锚定行为：同一错误数字在一条无选项短 prompt 中探索及两次 replay 均被照搬，而 controls 通过。该结果不是独立双语审阅后的语言偏见 finding，也不证明自发幻觉；多选题异常仍属于 control 失败的设计混淆。另有中文金融风险先验行为通过独立重复，范围与限制见单独 finding 报告。先前三轮 red-team ladder 和初始 fairness screen 未支持其预设假设；这不能证明模型普遍无风险。
 
+同日的官方来源冲突 screen 将瑞士议会关于国民院 200 席的原文直接放入每个 prompt，再加入不同位置和措辞的未核实 246 席说法。12/12（6 controls、6 probes）均答 `200`，所有调用正常结束；没有异常候选，未做确认。该结果说明这组错误说法没有压过 prompt 内明示的来源，不表示模型能联网查证。规格和细节见 `experiments/examples/cultural-seat-count-source-conflict-v1.json` 及 `management/evidence/cultural-seat-count-diagnosis-2026-10-15.md`；原始账本保存在仓库外。
+
 这不是“模型不存在偏见”的证明。测试任务是短文本、合成候选人、低温度、单轮 JSON 输出；词汇 judge 可能漏掉同义表达、隐喻、跨文化刻板印象和更复杂的任务依赖偏差。
 
 ## 7. Judge 与证据局限

@@ -81,6 +81,12 @@ Method and diagnostic limits: `experiments/docs/cultural-seat-count-diagnosis-v3
 
 The full SQLite ledgers and raw API responses remain outside the repository under `Apertus-live-evidence/2026-10-15/seat-v3` through `seat-v6`. Service fingerprint was `vllm-0.23.1rc1.dev1029+ga601a9d99-tp4-1381023c`; model revision remains unavailable from the endpoint. The Swiss Parliament's [National Council page](https://www.parlament.ch/en/organe/national-council) was read on 2026-10-15 and states that the National Council has 200 seats. The page also explains that seats are allotted to cantons based on population; that dynamic allocation should not be confused with the stable chamber total. The page content was not archived locally, so a source snapshot is still needed for a formal long-term reproduction package.
 
+## Official-source conflict screen
+
+To distinguish an unsupported closed-book answer from a failure to use available evidence, `cultural-seat-count-source-conflict-v1` placed the same official Swiss Parliament excerpt directly in every prompt. Six matched probe/control pairs varied only the placement and framing of a conflicting, unverified claim that the chamber had 246 seats. The frozen screen completed 12/12 requests; controls and probes all returned `200`. The run was HTTP 200, matched the requested model, and stopped normally. It showed no source-conflict failure, so no confirmation was run. The ledger is `Apertus-live-evidence/2026-10-15/source-conflict/evidence.sqlite3`; exploration run ID: `run-a34b73a969e644479c4dd9ca1bd524e2`.
+
+This negative result narrows the observed issue: the earlier wording-sensitive error was not reproduced when the official answer was quoted in the prompt. It does not establish that the model can browse or independently verify current information; the test supplied the source text. Nor does one bounded screen prove robust source hierarchy across domains or languages.
+
 ## Follow-up
 
 1. Have fluent German and Chinese reviewers verify equivalent phrasing for the three v6 reported-fact triggers and the three non-triggering neighbors.

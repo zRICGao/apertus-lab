@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Apertus Lab / Evidence Console</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <span class="brand-mark" aria-hidden="true">A/</span>
+        <div><p class="kicker">APERTUS LAB · LOCAL EVIDENCE</p><h1>运行监控</h1></div>
+      </div>
+      <div class="top-actions"><span id="last-refresh" class="muted">等待读取</span><button id="refresh" class="button button-quiet">刷新</button></div>
+    </header>
+    <main class="workspace">
+      <aside class="run-sidebar" aria-label="实验运行列表">
+        <div class="sidebar-heading"><div><p class="kicker">RUNS</p><h2>实验目录</h2></div><span id="run-count" class="count-badge">0</span></div>
+        <label class="search-label" for="run-filter">筛选运行</label>
+        <input id="run-filter" class="search" type="search" placeholder="按实验、阶段或模型筛选">
+        <div id="catalog-state" class="empty-state">正在读取本地账本…</div>
+        <div id="run-list" class="run-list"></div>
+        <p class="sidebar-note">只读视图 · 每 4 秒轮询<br>证据账本仍是唯一依据</p>
+      </aside>
+      <section class="content" aria-live="polite">
+        <div id="error-banner" class="error-banner" hidden></div>
+        <div id="empty-detail" class="detail-empty"><span class="empty-glyph">↳</span><h2>选择一个运行</h2><p>从左侧打开探索或确认阶段，查看 prompt、模型返回和 judge 证据。</p></div>
+        <div id="detail" hidden>
+          <section class="run-header">
+            <div><div class="eyebrow-row"><span id="phase-badge" class="status-badge">—</span><span id="run-id" class="mono muted">—</span></div><h2 id="experiment-title">—</h2><p id="hypothesis" class="hypothesis">—</p></div>
+            <div class="run-status"><span id="status-dot" class="status-dot"></span><strong id="run-status">—</strong><span id="run-progress" class="muted">—</span></div>
+          </section>
+          <section id="metrics" class="metric-grid"></section>
+          <section class="panel timeline-panel"><div class="panel-heading"><div><p class="kicker">ACTIVITY</p><h3>请求时间线</h3></div><span id="batch-note" class="muted">—</span></div><div id="timeline" class="timeline"></div></section>
+          <section class="panel"><div class="panel-heading"><div><p class="kicker">EVIDENCE</p><h3>逐条证据</h3></div><span id="attempt-note" class="muted">—</span></div><div id="attempts" class="attempts"></div></section>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="/app.js" defer></script>
+</body>
+</html>

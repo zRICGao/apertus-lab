@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from .contracts import canonical, fields, identifier, text
+from .evaluators import FAIRNESS_EVALUATOR
 
 MODEL = "swiss-ai/Apertus-v1.5-70B"
 ENDPOINT = "https://api.inference.cscs.ch/v1"
@@ -17,8 +18,10 @@ def integer(value: Any, name: str, low: int, high: int) -> None:
 
 
 def validate_spec(data: dict) -> dict:
-    fields(data, {"schema_version", "id", "hypothesis", "target", "cases", "limits",
-                  "generation", "confirmation", "evaluator"})
+    required = {"schema_version", "id", "hypothesis", "target", "cases", "limits",
+                "generation", "confirmation", "evaluator"}
+    if set(data) not in (required, required | {"dispatch"}):
+        raise ValueError("Invalid live spec fields")
     if data["schema_version"] != "2.0":
         raise ValueError("Live requires schema_version 2.0")
     identifier(data["id"])
@@ -29,8 +32,15 @@ def validate_spec(data: dict) -> dict:
         raise ValueError("MVP only supports the configured CSCS Apertus v1.5 70B endpoint")
     for key in ("revision", "service_version"):
         text(target[key], key)
-    if data["evaluator"] != "exact-stripped-text-v1":
-        raise ValueError("MVP evaluator must be exact-stripped-text-v1")
+    if data["evaluator"] not in {"exact-stripped-text-v1", FAIRNESS_EVALUATOR}:
+        raise ValueError("Unsupported evaluator")
+    if "dispatch" in data:
+        fields(data["dispatch"], {"mode", "max_in_flight"})
+        if data["dispatch"]["mode"] != "paired_parallel":
+            raise ValueError("Unsupported dispatch mode")
+        integer(data["dispatch"]["max_in_flight"], "max_in_flight", 2, 8)
+        if data["dispatch"]["max_in_flight"] % 2:
+            raise ValueError("Paired parallel dispatch requires an even in-flight cap")
     limits = data["limits"]
     fields(limits, {"exploration_calls", "confirmation_calls", "max_input_chars",
                     "run_seconds", "request_seconds"})
@@ -52,8 +62,11 @@ def validate_spec(data: dict) -> dict:
     if not isinstance(cases, list) or not cases or len(cases) > 100:
         raise ValueError("Expected 1–100 cases")
     ids, pairs = set(), {}
+    case_fields = {"id", "pair", "role", "language", "prompt", "expected"}
+    if data["evaluator"] == FAIRNESS_EVALUATOR:
+        case_fields.add("judge")
     for case in cases:
-        fields(case, {"id", "pair", "role", "language", "prompt", "expected"})
+        fields(case, case_fields)
         identifier(case["id"])
         identifier(case["pair"])
         if case["id"] in ids:
@@ -65,12 +78,30 @@ def validate_spec(data: dict) -> dict:
             text(case[key], key)
         if len(case["prompt"]) > limits["max_input_chars"]:
             raise ValueError("Case exceeds input character bound")
+        if data["evaluator"] == FAIRNESS_EVALUATOR:
+            judge = case["judge"]
+            fields(judge, {"protected_terms", "stereotype_terms", "unsupported_markers"})
+            for key in judge:
+                values = judge[key]
+                if (not isinstance(values, list) or not values or len(values) > 32
+                        or any(not isinstance(value, str) or not value.strip() for value in values)):
+                    raise ValueError(f"judge.{key} must be a nonempty list of text")
         pairs.setdefault(case["pair"], []).append(case)
     for pair in pairs.values():
         if len(pair) != 2 or {c["role"] for c in pair} != {"probe", "control"}:
             raise ValueError("Each pair needs exactly one probe and one control")
         if len({c["language"] for c in pair}) != 1:
             raise ValueError("Matched pairs must use the same language")
+        if data["evaluator"] == FAIRNESS_EVALUATOR:
+            control = next(c for c in pair if c["role"] == "control")
+            probe = next(c for c in pair if c["role"] == "probe")
+            if control["judge"] != probe["judge"]:
+                raise ValueError("Fairness pairs must share judge metadata")
+            terms = [term.casefold() for term in control["judge"]["protected_terms"]]
+            if any(term in control["prompt"].casefold() for term in terms):
+                raise ValueError("Fairness control must omit protected attribute terms")
+            if not any(term in probe["prompt"].casefold() for term in terms):
+                raise ValueError("Fairness probe must include a protected attribute term")
     if limits["exploration_calls"] < len(cases) or limits["confirmation_calls"] < len(cases) * confirmation["repetitions"]:
         raise ValueError("Call limits cannot cover the declared complete experiment")
     # Defensive copy and finite JSON validation.

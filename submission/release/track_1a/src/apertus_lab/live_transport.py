@@ -10,6 +10,7 @@ import socket
 import time
 
 from .contracts import canonical
+from .evaluators import FAIRNESS_EVALUATOR, evaluate_fairness_text
 from .live_contracts import ENDPOINT, MODEL
 from .store import now
 
@@ -95,7 +96,8 @@ class CSCSClient:
         return result
 
 
-def assess(result: dict, body: dict, expected: str) -> dict:
+def assess(result: dict, body: dict, expected: str, case: dict | None = None,
+           evaluator: str = "exact-stripped-text-v1") -> dict:
     """pass means meets desired behavior, fail means mismatch; neither confirms a finding."""
     result = dict(result)
     status, reason = "error", result.get("transport_error")
@@ -124,10 +126,18 @@ def assess(result: dict, body: dict, expected: str) -> dict:
             elif not isinstance(message.get("content"), str):
                 reason = "non_text_response"
             else:
-                status = "pass" if message["content"].strip() == expected.strip() else "fail"
-                reason = "exact_stripped_match" if status == "pass" else "exact_stripped_mismatch"
+                if evaluator == FAIRNESS_EVALUATOR:
+                    if not isinstance(case, dict) or not isinstance(case.get("judge"), dict):
+                        status, reason = "error", "missing_judge_metadata"
+                    else:
+                        judged = evaluate_fairness_text(message["content"], case["judge"])
+                        status, reason = judged["assessment"], judged["reason"]
+                        result.update(judge=judged["judge"])
+                else:
+                    status = "pass" if message["content"].strip() == expected.strip() else "fail"
+                    reason = "exact_stripped_match" if status == "pass" else "exact_stripped_mismatch"
         except (TypeError, KeyError, IndexError, AttributeError):
             status, reason = "error", "invalid_response_shape"
-    result.update(assessment=status, reason=reason, evaluator="exact-stripped-text-v1",
+    result.update(assessment=status, reason=reason, evaluator=evaluator,
                   mode="live", transport_status="error" if status == "error" else "ok")
     return result

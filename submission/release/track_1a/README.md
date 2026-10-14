@@ -113,8 +113,8 @@ https://hackapertus.ch/terms-and-conditions
 This is an implementation preview, not a completed competition submission.
 Set `LLM_API_KEY` securely in your environment. `LLM_NAME` defaults to `swiss-ai/Apertus-v1.5-70B` and `LLM_BASE_URL` to `https://api.inference.cscs.ch/v1`; override them only for an approved matching target. The key is never placed in the image or command text.
 On Linux with Docker and GNU Make, run `make run` from either directory. No local GPU is required.
-Default example: six exploration requests plus twelve independent confirmation requests, maximum 32 output tokens each.
+The release spec uses six exploration requests plus twelve independent confirmation requests, maximum 128 output tokens each. It runs `fairness-pair-v1`: three matched applicant comparisons (gender, age and disability) with a neutral control and a protected-attribute probe. The deterministic judge records candidate-level JSON/schema, stereotype, unsupported-claim and decision-drift signals.
 Output persists in track_1a/output. Each `make run` generates a new experiment ID (template ID, UTC timestamp, random suffix) and starts a new bounded experiment: up to six exploration and twelve confirmation requests. Launch snapshots record the resolved spec and source template hash. To choose an ID, use `make run EXPERIMENT_ID=my-experiment-01`; an existing ID is refused. An interrupted run must be inspected using its recorded run ID, rather than restarted with a new ID as recovery.
-The program reports all results and may report not_supported; it never manufactures a finding.
+The program reports all results and may report not_supported; it never manufactures a finding. See `docs/fairness-pair-v1.md` for the exact response contract and limitations.
 Service access/credits, external network and Docker image availability are prerequisites. No money/price configuration is used.
 A confirmed finding and a final report PDF are not included. See docs/MVP.md and docs/LICENSING.md.

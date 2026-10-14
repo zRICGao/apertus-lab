@@ -26,9 +26,10 @@ def _batches(spec: dict, phase: str) -> list[list[dict]]:
             for i in range(0, len(ordered), pair_capacity)]
 
 
-def _send(client: CSCSClient, body: dict, timeout: float, expected: str) -> dict:
+def _send(client: CSCSClient, body: dict, timeout: float, expected: str,
+          case: dict, evaluator: str) -> dict:
     try:
-        return assess(client.send(body, timeout), body, expected)
+        return assess(client.send(body, timeout), body, expected, case, evaluator)
     except Exception:
         # No exception text is stored: a transport or mock may include credentials.
         return {"mode": "live", "assessment": "error", "reason": "worker_error", "sent": True}
@@ -89,7 +90,8 @@ def execute_paired_parallel(store: LiveStore, spec: dict, client: CSCSClient,
                     # revoke it; every completed response is persisted before another batch.
                     futures = [(attempt_id, pool.submit(_send, client, body,
                                                         min(timeout, max(0.001, deadline - time.monotonic())),
-                                                        item["case"]["expected"]))
+                                                        item["case"]["expected"], item["case"],
+                                                        spec["evaluator"]))
                                for attempt_id, item, body, timeout in reserved]
                     results = []
                     for attempt_id, future in futures:

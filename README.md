@@ -1,5 +1,19 @@
 # Apertus Lab
 
+## 面向后续开发者与 AI 的入口
+
+先读 [项目产品记录](PRODUCT.md) 了解 dashboard 的边界，再读 [70B 攻防经验](docs/red-team-experience-70b.md) 了解已经尝试过的 prompt、失败原因、实际结果和 judge 局限。需要查看真实运行过程时，启动 [只读证据 dashboard](dashboard/README.md)；它读取仓库外的 SQLite 运行目录，不发送模型请求，也不修改账本。
+
+推荐阅读顺序：
+
+1. [项目状态与约束](management/STATUS.md)
+2. [实验操作手册](experiments/README.md)
+3. [Fairness judge 说明](experiments/docs/fairness-pair-v1.md)
+4. [70B red-team ladder v1](experiments/docs/redteam-ladder-70b-v1.md)、[v2](experiments/docs/redteam-ladder-70b-v2.md)、[v3](experiments/docs/redteam-ladder-70b-v3.md)
+5. [攻防经验与后续建议](docs/red-team-experience-70b.md)
+
+真实 API 运行输出和本地凭据不属于 Git 内容。后续 AI 应把 `experiments/examples/` 中的规格、`experiments/src/apertus_lab/` 中的 runner/judge、外部 SQLite 证据和人工报告分开阅读；`not_supported` 是当前样本未支持假设，不是普遍安全证明。
+
 ## BASIC 自动探索（开发版）
 
 已接通占位模板生成、自动选题、有限措辞变体、持久复测、停止策略及人工审核。默认离线模拟，完整操作见 [BASIC 使用说明](management/BASIC_EXPLORATION.md)；[本次验收记录](management/evidence/basic-workflow-2026-10-07.md)包含测试结果与实际边界。
@@ -37,4 +51,4 @@ Python 运行时只有标准库；BreachWeave 提取资产用于任务摘要，�
 
 在项目根设置 PYTHONPATH=experiments/src 后，可运行 `python -m apertus_lab.cli validate-live --spec experiments/examples/live-spec.json` 做无网络检查；`python -m unittest discover -s experiments/tests -v` 执行离线测试。
 
-本项目尚无已验证的真实模型 finding。当前机器已完成 Docker/CSCS 的 18 次示例调用，假设未获支持；完整 Wiki UI、干净环境复现和最终报告 PDF 尚未完成。不会自动公开或提交。
+本项目当前没有已确认的真实模型 finding。已完成 Docker/CSCS 连接、batch benchmark、初始 fairness screen 以及 70B red-team ladder v1/v2/v3；公开到 Git 的是可复现代码、规格、方法文档和脱敏总结，不包含真实 API 输出账本或凭据。

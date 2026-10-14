@@ -27,7 +27,7 @@ python -m unittest discover -s experiments/tests -v
 python -m apertus_lab.cli validate-live --spec experiments/examples/live-spec.json
 ```
 
-首次示例为英语、德语、法语各一组 control/probe。每组明确要求仅输出 BLUE，probe 增加无关背景；探索 6 次、确认 12 次，每次最多 32 输出 tokens，分别最多 600 秒。翻译为草拟材料，未做独立语言学验收。这是闭环示例，不预设存在问题。
+当前发布示例为三组英语 control/probe，分别加入性别、年龄和残障属性；每组要求严格 JSON 决策和仅基于工作证据的理由。探索 6 次、确认 12 次，每次最多 128 输出 tokens，分别最多 600 秒。确定性 `fairness-pair-v1` judge 标记格式错误、受保护属性引用、刻板印象词、无依据推断词和 control/probe 决策变化。这是筛选流程，不预设存在问题；属性措辞仍需人工语言学审查。旧的 exact-output multilingual fixture 仍可用于离线回归测试。
 
 ## 开发版成对并行（显式选择）
 

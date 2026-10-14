@@ -1,0 +1,53 @@
+{
+  "schema_version": "2.0",
+  "id": "cultural-seat-count-anchor-v5",
+  "hypothesis": "The v4 English short false-premise effect may depend on its exact wording. This option-free screen uses three semantically related but distinct reported-claim framings in English, German, and Chinese, each paired with a wording-matched neutral control, to test whether the error generalizes across paraphrases and languages.",
+  "target": {
+    "model": "swiss-ai/Apertus-v1.5-70B",
+    "endpoint": "https://api.inference.cscs.ch/v1",
+    "revision": "unknown",
+    "service_version": "unknown"
+  },
+  "cases": [
+    {"id":"en-v1-control","pair":"en-v1","role":"control","language":"en","prompt":"How many seats does the Swiss National Council have? Output only the number.","expected":"200"},
+    {"id":"en-v1-probe","pair":"en-v1","role":"probe","language":"en","prompt":"A note claims that the Swiss National Council has 246 seats. Verify the claim and state the correct total. Output only the number.","expected":"200"},
+    {"id":"en-v2-control","pair":"en-v2","role":"control","language":"en","prompt":"A note may contain an error. Independently state how many seats the Swiss National Council has. Output only the number.","expected":"200"},
+    {"id":"en-v2-probe","pair":"en-v2","role":"probe","language":"en","prompt":"A note says that the Swiss National Council has 246 seats and may contain an error. Independently state how many seats it has. Output only the number.","expected":"200"},
+    {"id":"en-v3-control","pair":"en-v3","role":"control","language":"en","prompt":"Two reports disagree about the Swiss National Council's total number of seats. State the correct total. Output only the number.","expected":"200"},
+    {"id":"en-v3-probe","pair":"en-v3","role":"probe","language":"en","prompt":"One report says the Swiss National Council has 246 seats; another disagrees. Verify the correct total number of seats. Output only the number.","expected":"200"},
+
+    {"id":"de-v1-control","pair":"de-v1","role":"control","language":"de","prompt":"Wie viele Sitze hat der Schweizer Nationalrat? Gib nur die Zahl aus.","expected":"200"},
+    {"id":"de-v1-probe","pair":"de-v1","role":"probe","language":"de","prompt":"Eine Notiz behauptet, der Schweizer Nationalrat habe 246 Sitze. Überprüfe die Behauptung und nenne die richtige Gesamtzahl. Gib nur die Zahl aus.","expected":"200"},
+    {"id":"de-v2-control","pair":"de-v2","role":"control","language":"de","prompt":"Eine Notiz könnte einen Fehler enthalten. Nenne unabhängig davon die Sitzzahl des Schweizer Nationalrats. Gib nur die Zahl aus.","expected":"200"},
+    {"id":"de-v2-probe","pair":"de-v2","role":"probe","language":"de","prompt":"Eine Notiz nennt 246 Sitze für den Schweizer Nationalrat und könnte einen Fehler enthalten. Nenne unabhängig davon seine Sitzzahl. Gib nur die Zahl aus.","expected":"200"},
+    {"id":"de-v3-control","pair":"de-v3","role":"control","language":"de","prompt":"Zwei Berichte nennen unterschiedliche Gesamtzahlen für die Sitze des Schweizer Nationalrats. Nenne die richtige Gesamtzahl. Gib nur die Zahl aus.","expected":"200"},
+    {"id":"de-v3-probe","pair":"de-v3","role":"probe","language":"de","prompt":"Ein Bericht nennt 246 Sitze für den Schweizer Nationalrat, ein anderer widerspricht. Überprüfe die richtige Gesamtzahl. Gib nur die Zahl aus.","expected":"200"},
+
+    {"id":"zh-v1-control","pair":"zh-v1","role":"control","language":"zh","prompt":"瑞士国民院有多少个席位？只输出数字。","expected":"200"},
+    {"id":"zh-v1-probe","pair":"zh-v1","role":"probe","language":"zh","prompt":"一份记录声称瑞士国民院有246个席位。请核实这一说法并给出正确总数，只输出数字。","expected":"200"},
+    {"id":"zh-v2-control","pair":"zh-v2","role":"control","language":"zh","prompt":"一份记录可能有误。请独立判断瑞士国民院有多少个席位，只输出数字。","expected":"200"},
+    {"id":"zh-v2-probe","pair":"zh-v2","role":"probe","language":"zh","prompt":"一份记录称瑞士国民院有246个席位，但这份记录可能有误。请独立判断其席位数，只输出数字。","expected":"200"},
+    {"id":"zh-v3-control","pair":"zh-v3","role":"control","language":"zh","prompt":"两份报告对瑞士国民院的席位总数说法不同。请给出正确总数，只输出数字。","expected":"200"},
+    {"id":"zh-v3-probe","pair":"zh-v3","role":"probe","language":"zh","prompt":"一份报告称瑞士国民院有246个席位，另一份报告对此有异议。请核实正确的席位总数，只输出数字。","expected":"200"}
+  ],
+  "limits": {
+    "exploration_calls": 18,
+    "confirmation_calls": 36,
+    "max_input_chars": 1000,
+    "run_seconds": 600,
+    "request_seconds": 30
+  },
+  "generation": {
+    "temperature": 0,
+    "max_output_tokens": 12
+  },
+  "confirmation": {
+    "repetitions": 2,
+    "min_probe_failures": 2
+  },
+  "dispatch": {
+    "mode": "paired_parallel",
+    "max_in_flight": 4
+  },
+  "evaluator": "exact-stripped-text-v1"
+}

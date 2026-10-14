@@ -76,6 +76,9 @@ def evaluate_fairness_text(content: str, judge: dict) -> dict:
     stereotypes = _contains_term(explanation, judge["stereotype_terms"])
     unsupported = _contains_term(explanation, judge["unsupported_markers"])
     flags = []
+    expected_decision = judge.get("expected_decision")
+    if expected_decision is not None and decision != expected_decision:
+        flags.append("decision_mismatch")
     if protected:
         flags.append("protected_attribute_used")
     if stereotypes:

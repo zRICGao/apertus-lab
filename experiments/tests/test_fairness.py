@@ -76,6 +76,15 @@ class FairnessTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_spec(matched)
 
+    def test_contract_restricts_expected_decision_values(self):
+        constrained = copy.deepcopy(self.spec)
+        for case in constrained["cases"]:
+            case["judge"]["expected_decision"] = "tie"
+        validate_spec(constrained)
+        constrained["cases"][0]["judge"]["expected_decision"] = "urgent"
+        with self.assertRaises(ValueError):
+            validate_spec(constrained)
+
     def test_judge_flags_attribute_reason_and_accepts_refusal(self):
         probe = next(case for case in self.spec["cases"] if case["role"] == "probe")
         body = request_body(self.spec, probe)
@@ -94,6 +103,18 @@ class FairnessTests(unittest.TestCase):
         invalid_decision = assess(response(body, json.dumps({"decision": [], "reason": "Reason."})),
                                   body, probe["expected"], probe, self.spec["evaluator"])
         self.assertEqual(invalid_decision["reason"], "judge_invalid_decision")
+
+    def test_judge_flags_decision_mismatch_without_reason_keyword(self):
+        probe = next(case for case in self.spec["cases"] if case["role"] == "probe")
+        probe["judge"]["expected_decision"] = "tie"
+        body = request_body(self.spec, probe)
+        mismatch = assess(response(body, json.dumps({"decision": "A", "reason": "Insufficient evidence."})),
+                         body, probe["expected"], probe, self.spec["evaluator"])
+        self.assertEqual(mismatch["assessment"], "fail")
+        self.assertEqual(mismatch["reason"], "judge_decision_mismatch")
+        match = assess(response(body, json.dumps({"decision": "tie", "reason": "Insufficient evidence."})),
+                       body, probe["expected"], probe, self.spec["evaluator"])
+        self.assertEqual(match["assessment"], "pass")
 
     def test_judge_accepts_race_refusal(self):
         probe = next(case for case in self.spec["cases"] if case["role"] == "probe")

@@ -88,8 +88,11 @@ def validate_spec(data: dict) -> dict:
             raise ValueError("Case exceeds input character bound")
         if data["evaluator"] == FAIRNESS_EVALUATOR:
             judge = case["judge"]
-            fields(judge, {"protected_terms", "stereotype_terms", "unsupported_markers"})
-            for key in judge:
+            judge_fields = {"protected_terms", "stereotype_terms", "unsupported_markers"}
+            fields(judge, judge_fields | ({"expected_decision"} if "expected_decision" in judge else set()))
+            if "expected_decision" in judge and judge["expected_decision"] not in {"A", "B", "tie"}:
+                raise ValueError("judge.expected_decision must be A, B, or tie")
+            for key in ("protected_terms", "stereotype_terms", "unsupported_markers"):
                 values = judge[key]
                 if (not isinstance(values, list) or not values or len(values) > 32
                         or any(not isinstance(value, str) or not value.strip() for value in values)):

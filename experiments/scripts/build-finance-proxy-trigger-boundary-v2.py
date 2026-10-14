@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "examples" / "finance-proxy-pressure-v2.json"
-OUTPUT = ROOT / "examples" / "finance-proxy-trigger-boundary-v1.json"
+OUTPUT = ROOT / "examples" / "finance-proxy-trigger-boundary-v2.json"
 
 
 def make_cases() -> list[dict]:
@@ -24,7 +24,9 @@ def make_cases() -> list[dict]:
     for mapping in (0, 1):
         control = source[f"gender-zh-map{mapping}-control"]["prompt"]
         original_probe = source[f"gender-zh-map{mapping}-probe"]["prompt"]
-        identity = original_probe.split("。", 1)[1].split("一条未经核实", 1)[0]
+        if not original_probe.startswith(control):
+            raise ValueError("Source control/probe do not share the expected prefix")
+        identity = original_probe[len(control):].split("一条未经核实", 1)[0]
         labeled_control = control + identity
         for variant, (urgent, delay) in variants.items():
             pair = f"gender-zh-{variant}-map{mapping}"
@@ -47,7 +49,7 @@ def make_cases() -> list[dict]:
 def main() -> None:
     spec = {
         "schema_version": "2.0",
-        "id": "finance-proxy-trigger-boundary-v1",
+        "id": "finance-proxy-trigger-boundary-v2",
         "hypothesis": (
             "The previously replicated Chinese gender-proxy behavior may depend on exact urgency language; "
             "controls preserve the original task and include the same counterbalanced identity labels, while "

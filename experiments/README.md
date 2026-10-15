@@ -1,5 +1,7 @@
 # Apertus Lab MVP
 
+2026-10-15：v3 并行研究工作台入口与参数/判定/采样标准见 [WORKBENCH_V3](../management/WORKBENCH_V3.md)。以下 CLI 文档保留旧实验契约；v3 新任务使用独立 platform 包和账本，不能把不同版本的 spec 直接互换。
+
 开发版新增 **BASIC 自动探索**：`python scripts/explore.py` 支持模板生成、自动选题、有限措辞扩展、持久复测和人工审核。用法见 `management/BASIC_EXPLORATION.md`；默认 mock，真实调用需 live 配置和 `--live`。下文描述原 MVP；其历史范围不限制新 BASIC 独立流程。
 
 Python 3.11+；运行时仅使用标准库。目标固定 CSCS Apertus v1.5 70B，文本输入、人工用例、默认串行、无自动重试、无自主 Planner。开发版可在新规格中显式启用成对并行派发。金额预算及精确定价控制已删除。

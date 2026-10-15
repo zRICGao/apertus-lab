@@ -135,6 +135,18 @@ class FairnessTests(unittest.TestCase):
         self.assertEqual(len(client.calls), 18)
         self.assertTrue(all(report["control_pass"] for report in summary["pair_reports"]))
 
+    def test_pair_drift_review_exports_matched_control_and_probe(self):
+        from apertus_lab.review import record_review, export_review
+        first = execute(self.store, self.spec, FairnessClient())
+        second = execute(self.store, self.spec, FairnessClient(), first)
+        review = json.loads((EXAMPLES / "review-template.json").read_text(encoding="utf-8"))
+        review.update(reviewer="fixture-reviewer", human_reviewed=True, probe_ids=["gender-probe"])
+        finding = record_review(self.store, first, second, review)
+        exported = export_review(self.store, finding, Path(self.temp.name) / "export")
+        value = json.loads(next((exported / "findings").glob("*.json")).read_text(encoding="utf-8"))
+        self.assertIn("MATCHED CONTROL", value["apertus_response_walkthroughs"][0])
+        self.assertIn("PROBE:", value["apertus_response_walkthroughs"][0])
+
 
 if __name__ == "__main__":
     unittest.main()

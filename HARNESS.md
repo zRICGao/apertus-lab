@@ -1,5 +1,7 @@
 # Apertus Lab HARNESS v1.1
 
+2026-10-15 v3 架构补充（优先于历史“串行／无自主 Planner／不新建服务”的开发限制）：按用户批准的计划实现单机 API + 独立 worker + React UI；所有角色、任务共享最多 10 个在途请求；阶段额度、冻结复测、人工审核和独立 replay 边界继续有效。具体实现与工程默认阈值见 management/WORKBENCH_V3.md，验收以 STATUS 和带日期证据为准。BreachWeave 原始资产与完整指定 LLM Wiki 保留，v3 调度不要求启动完整 BreachWeave。旧发布包不自动升级。
+
 2026-10-07 BASIC 开发版更新（优先于下文 MVP 的“人工用例/无自主 Planner”限制）：用户已批准自动选题、有限变体扩展、持久复测和人工审核闭合。新增 BASIC-1 独立账本与 CLI；允许固定 Apertus 70B 在不同新会话中生成模板、辅助观察和接受测试。所有角色计入总额度，复测留专用额度；模型不能修改宿主停止条件。占位模板结果不得直接晋升为官方 finding。现有冻结发布包和旧实验契约保持原范围。操作及实现边界见 management/BASIC_EXPLORATION.md。
 
 架构与执行基线：2026-10-06，Europe/Zurich。本文统一总体架构、研究工作流、代码规范、交付物与验收。PROJECT_OUTLINE 是摘要，STATUS/TASKS 记录实际进度。本文中的强制要求须逐项实现并验证；文档定稿不代表运行控制已经实现。
@@ -28,7 +30,7 @@
 | 干净检出，项目根 make run 启动 Docker，端到端执行 | track_1a/ 作为官方项目根；仓库根也提供转发 Makefile，两个入口都验收 |
 | LLM_NAME、LLM_BASE_URL、LLM_API_KEY | 由入口映射到受限 TargetClient；检查模型/版本和 endpoint，不把密钥写入证据 |
 | data/ 最大 100 MB | 按目录实际字节计数，项目保守门槛为 100,000,000 字节；超限即阻止打包 |
-| 更新 technical_report.md；TeamName_Report.pdf ≤6 页 | 保留官方章节，按全部 PDF 页数计数；报告代码/模型角色、方法、发现、限制、复现条件 |
+| 更新 technical_report.md；TeamName_Report.pdf 正文≤6 页、不含参考文献 | 保留官方章节，分别核对正文与参考文献；报告代码/模型角色、方法、发现、限制、复现条件 |
 | findings 使用 CDLA-Permissive-2.0；提交私有至 2026-12-01 | findings 许可单独标识；代码、报告和第三方素材分别列明许可；不提前公开 |
 | 私有 Git 仓库；添加 judgeailights；提交仓库 URL 和 PDF | 作为最终发布检查；本轮不创建远程仓库、授予权限或代提交 |
 | 通过 http://hackapertus.ch/online-hack/submissions 提交，不走 Devpost | 最终核对实际提交渠道和访问权限 |

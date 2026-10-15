@@ -17,6 +17,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 apertus_lab = ["*.json"]
+"apertus_lab.platform" = ["*.json"]
 
 [tool.ruff]
 target-version = "py311"

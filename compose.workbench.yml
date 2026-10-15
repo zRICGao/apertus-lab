@@ -1,0 +1,36 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.workbench
+    image: apertus-research-workbench:3
+    ports:
+      - "127.0.0.1:8770:8770"
+    volumes:
+      - workbench-data:/data
+      - ./experiments/wiki-workspace:/wiki
+    env_file:
+      - path: .env
+        required: false
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8770/api/v1/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+    restart: unless-stopped
+  worker:
+    image: apertus-research-workbench:3
+    command: ["worker"]
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - workbench-data:/data
+      - ./experiments/wiki-workspace:/wiki
+    env_file:
+      - path: .env
+        required: false
+    restart: unless-stopped
+    stop_grace_period: 130s
+volumes:
+  workbench-data:

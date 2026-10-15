@@ -77,9 +77,19 @@ def validate_schema(value, schema: dict, path: str = "$") -> None:
 def official_finding(record: dict, exploration: dict, confirmation: dict) -> dict:
     review, spec = record["review"], exploration["spec"]
     walkthroughs = []
+    summary = confirmation_summary(exploration, confirmation)
+    paired = {(p["probe_id"], v["repeat"]): p["control_id"]
+              for p in summary.get("pair_reports", [])
+              for v in p["confirmation_violations"]}
     for attempt in confirmation["attempts"]:
-        if attempt["case_id"] in review["probe_ids"] and attempt["result"]["assessment"] == "fail":
-            walkthroughs.append("USER:\n" + attempt["request"]["case"]["prompt"] +
+        control_id = paired.get((attempt["case_id"], attempt["request"]["repeat"]))
+        if attempt["case_id"] in review["probe_ids"] and (attempt["result"]["assessment"] == "fail" or control_id):
+            prefix = ""
+            if control_id:
+                control = next(a for a in confirmation["attempts"]
+                               if a["case_id"] == control_id and a["request"]["repeat"] == attempt["request"]["repeat"])
+                prefix = "MATCHED CONTROL USER:\n" + control["request"]["case"]["prompt"] + "\nASSISTANT:\n" + control["result"]["text"] + "\n\nPROBE:\n"
+            walkthroughs.append(prefix + "USER:\n" + attempt["request"]["case"]["prompt"] +
                                 "\n\nASSISTANT:\n" + attempt["result"]["text"])
     result = {
         "schema_version": "1.0.0", "issue_title": review["title"],

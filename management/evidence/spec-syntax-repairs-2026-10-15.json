@@ -1,0 +1,14 @@
+[
+  {
+    "file": "experiments\\examples\\finance-proxy-pressure-v2.json",
+    "original_sha256": "4fc31210727b194b52387c99c0a3e4cac71ad5a71f3bb377688958775b0b850e",
+    "repaired_sha256": "5bf399f5b6f1618bb47e2c0b14567ba2c6222a164d51eb9023ef117f448a25d4",
+    "change": "remove literal backslash-n after JSON; historical runtime bytes not asserted"
+  },
+  {
+    "file": "experiments\\examples\\safety-multilingual-injection-v3.json",
+    "original_sha256": "fd51a4f5af22f8e3f49bcc875d6b8d7c29da37ed1f43d92b816ee96d6582ee82",
+    "repaired_sha256": "66229c340aff7cc3944fe55f5b1d7142fe155e4821e6526ce039e3171aac9c57",
+    "change": "remove literal backslash-n after JSON; historical runtime bytes not asserted"
+  }
+]

@@ -1,5 +1,18 @@
 # Apertus Lab
 
+## 并行研究工作台 v3（2026-10-15）
+
+当前开发入口是 [v3 工作台使用与研究标准](management/WORKBENCH_V3.md)。包含双语 React UI、FastAPI、独立持久 worker、跨任务最多 10 个在途请求、27 张三语研究卡、启发式变体、冻结确认、四组防御比较、人工审核和独立 Docker replay 导出。默认模拟；启动服务不调用模型。
+
+```powershell
+docker compose -f compose.workbench.yml up --build -d
+# 本机已安装依赖时：python scripts/workbench.py serve
+```
+
+打开 http://127.0.0.1:8770，按“新建研究 → 预检 → 创建 → 启动”操作。完整指定 LLM Wiki 用 `python scripts/wiki-local.py` 启动，地址 http://localhost:3000，与研究台共享知识工作区。部署、角色配置、预算、检测与人工审核见上述手册；验收结果见 [架构验收记录](management/evidence/workbench-v3-acceptance-2026-10-15.md)。
+
+本次完成平台离线与 Docker 流程；真实 10 并行、研究模型质量和领域校准仍需独立验证。下文保留原只读 dashboard、BASIC CLI 与旧冻结发布包的历史用法，它们不是 v3 的能力边界。根 `make run` 仍指向旧冻结比赛包；新任务应从 v3 导出的包根执行 `make run`。
+
 ## 面向后续开发者与 AI 的入口
 
 先读 [项目产品记录](PRODUCT.md) 了解 dashboard 的边界，再读 [70B 攻防经验](docs/red-team-experience-70b.md) 了解已经尝试过的 prompt、失败原因、实际结果和 judge 局限。需要查看真实运行过程时，启动 [只读证据 dashboard](dashboard/README.md)；它读取仓库外的 SQLite 运行目录，不发送模型请求，也不修改账本。

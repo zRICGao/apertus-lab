@@ -66,6 +66,13 @@
 - 4个Python集成测试、3个Bun测试通过；浏览器查看运行与逐条证据成功。本轮没有真实模型请求。
 - 完整 Wiki 启动器已有转发入口但未完成API/Web验收；下一单元为ARCH002。证据见 evidence/architecture-integration-2026-10-07.md。
 
+## 2026-10-15：新增提交审查
+
+- 后续用户要求先 pull：从 Prototype/main 使用 --ff-only --autostash --no-recurse-submodules 快进至 4925c63。自动恢复时 STATUS 顶部文字冲突已合并保留双方内容，三份管理文件恢复为未暂存；HEAD 与 FETCH_HEAD 一致，diff --check 通过。未改变 origin URL，未触碰 BreachWeave 本地改动。
+- 按用户请求读取项目约定及当前 Git 状态。origin 的 Hackapertus 地址不可用；根据已有上传证据核对并 fetch Prototype/main `4925c63`，未合并或改变本地 HEAD。
+- 提取被忽略的源码快照，审查新增 13 个提交；70 项离线测试通过，补充解析/汇总/导出/筛查探针复现 5 项问题。完整范围、行号、命令与验证边界见 evidence/commit-review-2026-10-15.md。
+- 业务实现及子仓库未修改，无真实模型调用、提交或推送；原有 BreachWeave 改动保留。仅新增审查记录并同步管理文件，修复仍待后续工作单元。
+
 ## 2026-10-06
 - 检查工作目录：四个业务目录已存在；根目录已有 BreachWeave 架构手册。
 - 阅读手册的来源、定位和启动说明入口；确定本地固定版本作为唯一源码基线。
@@ -158,3 +165,27 @@
 - 按用户授权重新尝试 GCM OAuth 与读取远端 `main`。定位到全局 `http.proxy=socks5://127.0.0.1:7897` 与 GCM/.NET 网络栈不兼容；用命令级 `http.proxy=http://127.0.0.1:7897` 后，浏览器 OAuth 成功登录 `bobhelium`。实时远端仍为 `8aff6f7`，本地 11 个提交严格快进可达，随后以 `git -c http.proxy=http://127.0.0.1:7897 push origin HEAD:main` 推送成功至 `4d116f8`。
 - 推送后 fetch 核验本地 `HEAD` 与 `origin/main` 完全相同：`4d116f8ce5ab57d94d3400064c7c4a0f40952457`。没有强推、重写历史或修改全局代理；`.env`、密钥、原始响应和运行数据库未进入提交。
 
+# 2026-10-15：v3 并行启发式研究平台架构交付
+
+- 按用户“先按计划完成架构／继续”的授权，完成独立 React 双语工作台、FastAPI、持久 worker、SQLite WAL 证据与共享10并行。27张三语卡、六个研究辅助角色与Target隔离配置，固定阶段额度；受限反馈扩展、冻结确认、开放题逐对标注、人工审核、四组开发/留出防御、研究报告与独立Docker replay均已接通。
+- 修复审查R1–R4并保留旧规格/历史账本；医疗R5明确标疑，未在缺外部账本时伪造新汇总。修复Planner停止建议与变体派发的竞态，保留独立确认。传输部分响应、时限、密钥回显和请求预检有回归覆盖。
+- 最终全套98 Python tests（185.503s）、4前端测试、TypeScript/生产构建通过，npm audit为0。默认全模拟任务432调用、66对、3候选、0缺口/正式发现；本机与Docker黑盒各10调用，ZIP20文件哈希、SSE与独立4次replay通过。新导出包根make run与断网容器replay均成功。
+- 完整指定LLM Wiki已启动，历史与候选页及来源在原版Web可读；实际发现原版SQLite使用托管字段导致笔记保存500。仅修复两处本地查询并新增2回归，与原写锁回归共3项asyncio测试通过。浏览器编辑、重开与API持久化、重复文件409验证通过。子仓库补丁单独记录，未提交或替换上游。
+- Windows沙箱回环/TEMP限制通过正常本机与隔离Linux验证解决；Wiki环境无pytest，直接执行相同异步回归函数，明确记录限制。没有新增真实模型请求、付费调用、发布、远端推送或Git提交。用户已有修改保留。
+- 文档：WORKBENCH_V3、STATUS、TASKS、HARNESS、OUTLINE及使用入口已更新；证据见 evidence/workbench-v3-acceptance-2026-10-15.md/.json关联文件。下一步为真实服务10并行、研究生成质量与语言/领域校准；比赛正式finding/PDF/schema兼容/评审访问另行验收。
+
+# 2026-10-15：当前方法与数据链解释
+
+- 按用户要求核对v3的contracts/templates/evaluation/engine/exporting/store，形成 WORKFLOW_AND_EVIDENCE.md：使用流程、campaign到export数据链、违规与协议/服务错误分离、有目的自适应采样、冻结复测与人工门槛、有限外推。
+- 明确源码中的现有限制：研究问题不自动建立新领域数据集；每方向只冻结一个候选；防御只取首个重复支持候选；结束后开放题标注不会自动重启已跳过防御；HTML导出仍为文字/JSON。记录后续任务V3008，不将计划写成已有能力。
+- 会话内交互判定说明覆盖11种情形，逐一在浏览器切换并核对展示；包含mock不可晋升、格式歧义、失败对照、无效响应、不足重复、开放标注等。说明无模型调用、不改变判定规则；未重复运行不相关业务测试。
+
+
+# 2026-10-15：当前项目提交与推送
+
+- 用户授权同步当前项目。核验 Prototype/main=4925c63，与本地一致；配置中的 Hackapertus 已不可访问，使用历史可用 URL，保留 origin 设置。直连替代失效本地代理。
+- 整理 v3 源码/UI/配置与既有验收资料；Wiki SQLite 修复及新增回归以完整补丁保留，BreachWeave 历史删除标记不提交。14项针对性离线回归、JSON解析与敏感值检查通过，无真实模型请求。提交及推送结果见 Git 回执与 evidence/project-push-2026-10-15.md。
+
+- 提交/推送命令在执行前被自动审批拒绝：Prototype 为不同于 origin 的目标，当前项目内容向该目标上传需要明确授权。未创建提交或执行 push；文件已暂存，新增拦截说明尚未暂存，等待用户确认目标。
+
+- 用户随后明确回复“上传到PROTOTYPE”，授权当前项目上传至 https://github.com/zRICGao/Prototype.git 的 main 分支，继续普通快进推送。

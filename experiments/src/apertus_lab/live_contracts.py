@@ -44,7 +44,7 @@ def validate_spec(data: dict) -> dict:
         fields(data["dispatch"], {"mode", "max_in_flight"})
         if data["dispatch"]["mode"] != "paired_parallel":
             raise ValueError("Unsupported dispatch mode")
-        integer(data["dispatch"]["max_in_flight"], "max_in_flight", 2, 8)
+        integer(data["dispatch"]["max_in_flight"], "max_in_flight", 2, 10)
         if data["dispatch"]["max_in_flight"] % 2:
             raise ValueError("Paired parallel dispatch requires an even in-flight cap")
     limits = data["limits"]

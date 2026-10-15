@@ -1,5 +1,9 @@
 # Product
 
+## Current research platform (2026-10-15)
+
+The current delivery also includes a local bilingual research application at port 8770: React/TypeScript, FastAPI, an independent durable worker and an append-only evidence ledger. It creates and controls bounded mock or explicit live campaigns, shares ten in-flight slots across roles and campaigns, compares matched responses, collects human annotations/reviews, tests frozen defenses and exports standalone replay packages. See `management/WORKBENCH_V3.md` for usage and limits. The original dashboard described below remains a separate read-only historical evidence viewer; its restrictions do not describe the v3 application. Neither interface makes an automated candidate a confirmed finding.
+
 <!-- impeccable:product-schema 1 -->
 
 ## Platform

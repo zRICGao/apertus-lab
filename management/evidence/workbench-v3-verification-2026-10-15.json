@@ -1,0 +1,226 @@
+{
+  "recorded_at_utc": "2026-10-15T19:56:25.708187+00:00",
+  "root_head": "4925c63b848b11ed179a4d1ce5119773b10c8605",
+  "wiki_head": "aac3e6493306b7fff3b09cb181ca93918e93d0e6",
+  "mode": "offline/mock; no external model calls",
+  "python_tests": {
+    "count": 98,
+    "seconds": 185.503,
+    "passed": true
+  },
+  "ui_tests": 4,
+  "wiki_sqlite_async_tests": 3,
+  "npm_audit_vulnerabilities": 0,
+  "full_mock": {
+    "id": "campaign-f2d3442f6ad349829360e481a4ea5194",
+    "status": "completed",
+    "usage": {
+      "confirmation": 30,
+      "defense": 180,
+      "exploration": 132,
+      "planning": 90
+    },
+    "pairs": 66,
+    "candidates": 3,
+    "summary": {
+      "candidate_count": 3,
+      "confirmed_findings": 0,
+      "gaps": 0,
+      "independent_model_judge": false,
+      "mode": "mock",
+      "sampling": "purposive adaptive search; not population prevalence",
+      "scientific_confirmation": false,
+      "scope": "hosted_service; frozen prompts, language, output protocol and observation dates only"
+    },
+    "defense": {
+      "arms": {
+        "baseline": {
+          "attack_blocked": 0,
+          "attack_fail": 20,
+          "attack_n": 20,
+          "blocked": 0,
+          "calls": 40,
+          "invalid": 0,
+          "mean_request_seconds": 8.11457633972168e-05,
+          "n": 40,
+          "normal_blocked": 0,
+          "normal_n": 20,
+          "normal_pass": 20,
+          "preliminarily_effective": false,
+          "relative_reduction": 0.0,
+          "reported_tokens": null,
+          "usage_reported_calls": 0
+        },
+        "combined": {
+          "attack_blocked": 0,
+          "attack_fail": 0,
+          "attack_n": 20,
+          "blocked": 0,
+          "calls": 40,
+          "invalid": 0,
+          "mean_request_seconds": 8.742809295654297e-05,
+          "n": 40,
+          "normal_blocked": 0,
+          "normal_n": 20,
+          "normal_pass": 20,
+          "preliminarily_effective": true,
+          "relative_reduction": 1.0,
+          "reported_tokens": null,
+          "usage_reported_calls": 0
+        },
+        "rules": {
+          "attack_blocked": 0,
+          "attack_fail": 20,
+          "attack_n": 20,
+          "blocked": 0,
+          "calls": 40,
+          "invalid": 0,
+          "mean_request_seconds": 7.807612419128419e-05,
+          "n": 40,
+          "normal_blocked": 0,
+          "normal_n": 20,
+          "normal_pass": 20,
+          "preliminarily_effective": false,
+          "relative_reduction": 0.0,
+          "reported_tokens": null,
+          "usage_reported_calls": 0
+        },
+        "system": {
+          "attack_blocked": 0,
+          "attack_fail": 0,
+          "attack_n": 20,
+          "blocked": 0,
+          "calls": 40,
+          "invalid": 0,
+          "mean_request_seconds": 8.419156074523926e-05,
+          "n": 40,
+          "normal_blocked": 0,
+          "normal_n": 20,
+          "normal_pass": 20,
+          "preliminarily_effective": true,
+          "relative_reduction": 1.0,
+          "reported_tokens": null,
+          "usage_reported_calls": 0
+        }
+      },
+      "defense_is_model_fix": false,
+      "scope": "unseen labels, source wrappers and identity ordering; limited within-family holdout, not population or cross-domain generalization",
+      "status": "completed",
+      "threshold_source": "engineering preset, not UNESCO or Track 1A standard"
+    }
+  },
+  "blackbox": [
+    {
+      "campaign": "campaign-d81328fb4adc4f5d989746e7bb0896c2",
+      "status": "completed",
+      "mode": "mock",
+      "calls": 10,
+      "usage": {
+        "confirmation": 4,
+        "exploration": 2,
+        "planning": 4
+      },
+      "independent_replay_calls": 4,
+      "export_hashes_verified": 20,
+      "sse_first_event": "id: 1523",
+      "official_findings": 0,
+      "url": "http://127.0.0.1:8770"
+    },
+    {
+      "campaign": "campaign-c35381eaf4534efe869587377ea0c57a",
+      "status": "completed",
+      "mode": "mock",
+      "calls": 10,
+      "usage": {
+        "confirmation": 4,
+        "exploration": 2,
+        "planning": 4
+      },
+      "independent_replay_calls": 4,
+      "export_hashes_verified": 20,
+      "sse_first_event": "id: 43",
+      "official_findings": 0,
+      "url": "http://127.0.0.1:8780"
+    }
+  ],
+  "log_sha256": {
+    "workbench-final-tests.log": "631dbcbde156858ed0647483474202bd7c162ce5db65420b2e45319d53c63c70",
+    "workbench-ui-tests.log": "136613b35df563aea28482893a64de1662952fda3f0c6e403afd7071ad5f418f",
+    "workbench-ui-build.log": "3922fce7c9cf2d7c6518a26ed2ff1a0e75fdc5fb1bf37b0d1a2f7dc45be0ff53",
+    "workbench-npm-audit.log": "4b02d4a3c23d969c46bd2041360f80bfcb1fe760d9db864009acdd710f9de601",
+    "workbench-native-acceptance.log": "4bd830c1fa30bbcaf00e9632acf6bf4b8a7226a7caed0693e88fab3fbc305577",
+    "workbench-docker-acceptance.log": "01fd683693a0d76e89464448448dd836ce9edf0837b6e4f873b2c91b73702e01",
+    "workbench-export-make-run.log": "3385713f27b1ebd13eb253fc1f02fc7d8d648c343a0a786bd8531f04771acdd9",
+    "workbench-replay-network-none.log": "707bb99732167c5ac814d07f0268fe4d84278cb4c11adc61357b06e0dbc30167",
+    "workbench-wiki-tests.log": "fdf1a4370c96c42e2605042953185adf5658ab931be75131d597c348d7c5ba31"
+  },
+  "source_sha256": {
+    "experiments/src/apertus_lab/platform/api.py": "f037fe78b46ea1bb9a6215f9f92781fcf6cb4236018f6da0217c4168c19b1797",
+    "experiments/src/apertus_lab/platform/contracts.py": "8c96d14887e266df1d11fd329d2aba16548ff73153fb1c628f513ab2f0cb5e79",
+    "experiments/src/apertus_lab/platform/engine.py": "2a84d3ffdb9878d7174ee930d9144b27ba0725125b1dfebe6aa69388b80f32ee",
+    "experiments/src/apertus_lab/platform/evaluation.py": "eaad039a3be7c7bbaf7962068ef362ebfd90e8cbd82b5e571d78de8413da721f",
+    "experiments/src/apertus_lab/platform/exporting.py": "094cae4aabb0856bd5f97bb90697ee913a78cd3821970b4659b1172a3cd7ff2c",
+    "experiments/src/apertus_lab/platform/knowledge.py": "c71b210c31d3750d954cdfaee50625a3bd4c88a202aebb2034c49d71408cc578",
+    "experiments/src/apertus_lab/platform/providers.py": "3c8869c4f5e1ab9931ebef3fde0198f13bf4e95cd40655b86e8933e318ee73b9",
+    "experiments/src/apertus_lab/platform/replay.py": "5b1b81291cfdbc1f481323198681a3d36ff69bd24445d244dff5f8a695372dc7",
+    "experiments/src/apertus_lab/platform/store.py": "f8bc3877ee25290b4e95d9ce4344e053acd3a6b0ba110098cdda3f3d311d964a",
+    "experiments/src/apertus_lab/platform/templates.py": "7e44a995dea7345d41e59a3791ee3296312b00eceb4ae22dc8d2e92dd63fe151",
+    "experiments/src/apertus_lab/platform/__init__.py": "c580fb4444d31e6950d7949dac90f0d2634d5de720f113bec6f43b92aa26e2a1",
+    "experiments/src/apertus_lab/platform/calibration.json": "4da250431b9359b0e0fbec5c3b3e2ccd16dd3c591ddfc1df95f68c6453d60125",
+    "workbench/research-ui/src/api.test.ts": "9c07b5ba70cd3be347d4443a154da19cbd7d000bc7074706798db29254aff78e",
+    "workbench/research-ui/src/api.ts": "3f43b1838af8cd0fb2fbde11ac2b390549b10d26f844ecd69ff257047db47fd5",
+    "workbench/research-ui/src/main.tsx": "6b2633318f82252e994efc6c3479e7f458f4c96deceb254968c85a308d446a98",
+    "workbench/research-ui/src/style.css": "cae422a11393fc3eff13f1c008607af924cb71fda59da7832fc25b2eb32e1a13",
+    "Dockerfile.workbench": "faa23e98e944e9fc4f31b6206cfcff309b9ed0cc66b06e7fa2bb5b73ac3fe675",
+    "compose.workbench.yml": "3a247bbbe18e8c5616ac06a143de2a220dbf5118be9103084c8a52c74646bfd1",
+    "requirements-workbench.lock.txt": "7af96a920c5493529e1ea8fe035365e4ff9a17a64e502f12fc70005185340254",
+    "scripts/workbench.py": "fd6d143c336cd0a36bac2bee9f9b1954e1a2bcc4ba295350dcf849dfe3392b7e",
+    "scripts/wiki-local.py": "e0e544e080cc8b6feb0646be633610c3dd88ab781235b77e39da2b5fc459fe25",
+    "scripts/verify-workbench.py": "2f3d79559801a385112afb0f8310d2ccc6e8f844cd6b44da0f759c6a20623838",
+    "workbench/research-ui/package-lock.json": "e1d8584e979cf07106f3b68588a2d481152b7534117719d32885c6eff77fdaf3",
+    "knowledge/llmwiki/api/infra/db/sqlite.py": "b76948bb221614e05734ad4387ac4cd85e1f3ce6de99e9fc917ec996e490001d",
+    "knowledge/llmwiki/tests/unit/test_sqlite_document_lookup.py": "7693454e5f2c283da841a3d5c5c5b7819f7408e8c73646dc84d2a241a6419e7a",
+    ".dockerignore": "06df5a47360dac20f674e8630828fddd4400511e730d678d32e3f15576ca42a1",
+    ".gitignore": "ea5f96db36e4cb31246f15d4a07078d4d3756cd02760a02bf6a04feee82ae7d6",
+    ".env.example": "da7a3b8aed94b56b4cf397a0d8c4fd3124fead5a0f09448491605615c8917e7c"
+  },
+  "wiki_patch_sha256": "6a9ba7e9e59e448a41cff57c9f25b74d4e6c103014ee3536ac16d11612e8fc8e",
+  "docker_images": {
+    "apertus-research-workbench:3": "sha256:042f6dbd2477c46a6efc12abddb21869f4b878043b5b7191a074869dd196ae92",
+    "apertus-v3-replay-acceptance": "sha256:a376eda0b2a958572b279629d9060711a45841d23d8ee09cac69f441a7b279bc",
+    "apertus-replay": "sha256:9611b71d9eb087643446dcc864c69c4eb4e48282107e2554242d6b551eaf9b36"
+  },
+  "limits": [
+    "Live ten-way service concurrency unverified",
+    "Language/domain calibration unverified",
+    "No new confirmed finding or final submission PDF",
+    "Wiki submodule changes and root changes are uncommitted"
+  ],
+  "final_health": {
+    "8770": {
+      "status": "ok",
+      "worker_alive": true,
+      "version": "3.0",
+      "global_parallelism": 10
+    },
+    "8000": {
+      "status": "ok"
+    }
+  },
+  "final_docker_build": {
+    "passed": true,
+    "image": "sha256:5856c49f2d3f3143330a990f2ff969cdd577aefc33aedb7b0e1514bffdb0ffe8",
+    "context_excludes_runtime_knowledge": true,
+    "log_sha256": "d5d0646a788d8cf02f6ce3ec3cbf3da0de92f64b5c035ae7df0cb5fd8a7b0e46"
+  },
+  "secret_check": {
+    "nonignored_files_scanned": 269,
+    "configured_secret_matches": [],
+    "root_env_ignored": true
+  },
+  "git_diff_check": "root and Wiki passed",
+  "screenshots": {
+    "workbench-v3-preview-2026-10-15.png": "0a9e761c909dc32957b030641a7f56da7a8042e958b31d6c226dc0b051e08434",
+    "wiki-v3-edit-preview-2026-10-15.png": "c7ba4dc96ea06f454e943d9ec6a88dff752b47522a725903357332e4479225bf"
+  }
+}

@@ -1,5 +1,7 @@
 # Apertus Lab 全局大纲
 
+最新优先级（2026-10-15）：用户要求先完成已讨论的并行启发式攻防架构。v3 已实现 UI/API/独立 worker、共享 10 并行、模板与提示词、冻结确认、防御比较、知识同步及独立 replay；本轮仅离线/模拟验收，不生成真实 finding。详见 management/WORKBENCH_V3.md 与 STATUS 最新段落。以下 2026-10-07 计划保留为历史阶段。
+
 最新优先级（2026-10-07）：用户批准先实施 BASIC 自动探索管理闭合。新增模板生成、自动选题、措辞变体树、持久复测及人工审核 CLI；完整 Wiki/UI 接线继续列为后续项。BASIC 是开发版占位研究流程，正式比赛提交仍需真实发现与全部 Gate 验收。详见 management/BASIC_EXPLORATION.md。
 
 架构基线：HARNESS.md v1.1，2026-10-06。详细规则以 HARNESS 为准；官方核验见 management/TRACK_1A_REQUIREMENTS.md。

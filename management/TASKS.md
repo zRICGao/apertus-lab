@@ -2,11 +2,22 @@
 
 | ID | 阶段 | 任务 | 依赖 | 状态 | 验收 / 证据 |
 |---|---|---|---|---|---|
+| SYNC20261015 | 仓库同步 | 提交当前项目并推送 Prototype/main | 用户授权 | doing（用户已明确授权Prototype） | evidence/project-push-2026-10-15.md；14项回归通过 |
+| V3007 | 方法说明 | 核对实际流程、数据链、违规/采样/验证/外推并可视化 | 用户要求解释当前行为 | done（源码核对） | WORKFLOW_AND_EVIDENCE.md；11种交互情形展示通过，无模型调用 |
+| V3008 | P4–P6 | 开放题标注后补跑防御、候选机制分组及统计图表报告 | V3001、方法复核 | todo | 当前每方向一候选、防御只首个候选；结束后标注不自动重开防御；HTML报告仍文字/JSON |
+| V3001 | P2–P6 | 按计划实现 v3 并行启发式研究架构及双语 UI | 用户批准架构实施 | done（离线交付） | WORKBENCH_V3.md；98 Python + 4 UI；Docker API/worker、导出包 make run 与断网 replay 通过 |
+| V3002 | P2/P3 | 全角色共享 10 并行、预算、停止与崩溃恢复 | V3001 | done（fixture） | 原子预留与实际 worker 峰值10测试；真实 CSCS 10 并行待 V3005 |
+| V3003 | P4 | 完整原版 Wiki 共享工作区、来源与候选同步 | V3001、A002 | done（本机读写/同步） | 3000/8000；历史/候选/来源可读，笔记编辑重开和409通过；3项SQLite回归、哈希/幂等通过 |
+| V3004 | 审查 | 修复审查 R1–R4，隔离 R5 未核对统计 | V003 | done（修复/标疑） | spec-syntax-repairs；新增成对导出/混合拒答回归；medical v3/direction v2；R5 外部账本复核仍待办 |
+| V3005 | P3/P5 | 真实10并行、研究生成质量、语言/领域校准 | V3001、明确目标/额度、凭据 | todo（真实验收） | 不以 mock 替代；不默认调用付费外部 provider |
+| V3006 | P6 | 正式 findings、报告 PDF、schema 兼容及评审访问 | V3005、独立审阅及真实复测 | todo（正式提交） | 导出包已对齐 track_1a 布局和限制；尚非比赛提交 |
+| SYNC001 | 同步 | 拉取 Prototype/main 最新提交到本地 | 用户要求 pull | done | main 快进 9f0df93→4925c63；HEAD=FETCH_HEAD，本地审查记录及子模块修改保留，无未解决冲突 |
+| V003 | 审查 | Prototype 新增提交 9f0df93..4925c63 | 用户请求审查、固定远端提交 | done（审查） | 70 项离线测试通过；5 项缺陷/证据问题待修；evidence/commit-review-2026-10-15.md |
 | BASIC001 | P2/P3/P5 | BASIC 自动选题、变体关系、停止、持久复测及人工闭合 | 用户验收操作逻辑 | done（离线） | 56 Python tests；完整CLI示例66次模拟请求；evidence/basic-workflow-2026-10-07.md |
 | BASIC002 | P3 | Apertus 真实模板生成及有界自动流程验收 | BASIC001、CSCS会话凭据 | blocked（环境） | 当前进程无 LLM_* 环境变量；已提供显式 live 入口和冻结额度 |
 | BASIC003 | P4 | BASIC 候选接入工作台/Wiki UI | BASIC001、ARCH002 | todo | 当前通过CLI及导出包操作，未宣称完整UI集成 |
 | ARCH001 | P2/P4 | 本地只读工作台与幂等证据同步 | MVP002、B001 | done | evidence/architecture-integration-2026-10-07.md；4 Python + 3 Bun，真实账本未改 |
-| ARCH002 | P2/P4 | 完整 Wiki API/Web 与已有知识页贯通 | ARCH001、A002 | todo（后续） | 启动、读取/编辑已有页、核对来源；BASIC流程已按新授权优先实施 |
+| ARCH002 | P2/P4 | 完整 Wiki API/Web 与已有知识页贯通 | ARCH001、A002 | done（本机，v3） | 原版 API/Web、历史/候选页与来源；笔记编辑持久化，SQLite 最小兼容补丁；v3 验收记录 |
 | AGENT001 | P2 | 研究 Agent 与目标模型分离配置及只读预检 | ARCH001 | done（设计/预检） | RESEARCH_AGENT_SETUP.md、research-agent.example.json、`make agent-status`；无 Agent 调用 |
 | AGENT002 | P4/P5 | 受限 Planner、工具适配、持久轮次与候选报告 | ARCH002、AGENT001 | doing | BASIC001已完成受限CLI流程；完整Wiki检索/外部研究模型与UI仍待接通 |
 | PAR001 | P2/P3 | 开发版成对并行调度与证据门控 | X003 | done（离线） | evidence/paired-parallel-2026-10-07.md；32 Python tests，真实并行调用待验收 |
@@ -16,7 +27,7 @@
 | S002 | P1 | 确认并下载完整 Wiki | 仓库地址 | done | `knowledge/llmwiki` HEAD 为 `aac3e6493306b7fff3b09cb181ca93918e93d0e6` |
 | E002 | P1 | 解决必需依赖差距 | E001、上游要求 | doing | Wiki Python/Web 依赖已安装；Bun 已取得项目内可执行文件；GNU Make 4.4.1 已安装并验证；Docker Desktop 4.94.0 已以 WSL2 backend 启动、Linux 引擎可用；需新 Windows shell 刷新 PATH，Ubuntu WSL 集成可选；BreachWeave 冻结安装发现锁文件需核对 |
 | A001 | P2 | 启动 BreachWeave 基线 | S001、E002 | todo | 健康检查及最小 UI 操作 |
-| A002 | P2 | 启动 Wiki 基线 | S002、E002 | doing | 依赖、CLI help、workspace 初始化已通过；待 API/Web 服务健康检查 |
+| A002 | P2 | 启动 Wiki 基线 | S002、E002 | done（本机） | 3000/8000 健康；指定原版应用、共享工作区与读写验收；v3 证据 |
 | M002 | P0 | HARNESS v1.0 与官方要求映射 | M001、官方模板 | done | HARNESS/OUTLINE/TRACK_1A_REQUIREMENTS；设计完成，非功能验收 |
 | B001 | P2 | 提取 BreachWeave 资产并搭建基础框架（API/MCP可留空） | S001、M002 | done | REUSE_ASSETS.md、独立工作台与Python核心；2 Bun+10 Python+跨运行时smoke通过 |
 | O001 | P0 | 官方 schema 语法处理与 T&C 核实 | 固定模板 | todo | 本地语法修复副本、diff/hash及解析已完成；主办方兼容依据/T&C未闭合 |

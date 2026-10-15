@@ -1,0 +1,54 @@
+diff --git a/api/infra/db/sqlite.py b/api/infra/db/sqlite.py
+index e4c38a4..73955ee 100644
+--- a/api/infra/db/sqlite.py
++++ b/api/infra/db/sqlite.py
+@@ -196,2 +196,2 @@ class SQLiteDocumentRepository:
+-            "SELECT * FROM documents WHERE knowledge_base_id = ? AND user_id = ? "
+-            "AND filename = ? AND path = ? AND NOT archived",
++            "SELECT * FROM documents WHERE ? = (SELECT id FROM workspace LIMIT 1) AND user_id = ? "
++            "AND filename = ? AND path = ?",
+@@ -297 +297 @@ class SQLiteDocumentRepository:
+-            "SELECT id, knowledge_base_id, title, path, filename, version, highlights "
++            "SELECT id, (SELECT id FROM workspace LIMIT 1) as knowledge_base_id, title, path, filename, version, highlights "
+diff --git a/tests/unit/test_sqlite_document_lookup.py b/tests/unit/test_sqlite_document_lookup.py
+new file mode 100644
+index 0000000..3b0ac7d
+--- /dev/null
++++ b/tests/unit/test_sqlite_document_lookup.py
+@@ -0,0 +1,36 @@
++"""Local document lookups must use the single-workspace SQLite schema."""
++import uuid
++
++
++async def test_note_lookup_preserves_workspace_user_and_duplicate_identity(tmp_path):
++    from infra.db.sqlite import create_pool, SQLiteDocumentRepository
++    db = await create_pool(str(tmp_path / "index.db"))
++    workspace, user = str(uuid.uuid4()), str(uuid.uuid4())
++    try:
++        await db.execute("INSERT INTO workspace (id,name,description,user_id) VALUES (?, 'ws', '', ?)", (workspace, user))
++        await db.commit()
++        repo = SQLiteDocumentRepository(db)
++        note = await repo.create_note(workspace, user, "note.md", "/", "Note", "body", [])
++        assert (await repo.find_by_path(workspace, user, "note.md", "/"))["id"] == note["id"]
++        assert await repo.find_by_path(str(uuid.uuid4()), user, "note.md", "/") is None
++        assert await repo.find_by_path(workspace, str(uuid.uuid4()), "note.md", "/") is None
++    finally:
++        await db.close()
++
++
++async def test_source_url_lookup_derives_workspace_id_without_hosted_column(tmp_path):
++    from infra.db.sqlite import create_pool, SQLiteDocumentRepository
++    db = await create_pool(str(tmp_path / "index.db"))
++    workspace, user = str(uuid.uuid4()), str(uuid.uuid4())
++    try:
++        await db.execute("INSERT INTO workspace (id,name,description,user_id) VALUES (?, 'ws', '', ?)", (workspace, user))
++        await db.commit()
++        repo = SQLiteDocumentRepository(db)
++        note = await repo.create_note(workspace, user, "note.md", "/", "Note", "body", [])
++        await repo.update_metadata(note["id"], user, metadata={"source_url": "https://example.test/source"})
++        found = await repo.get_by_source_url("https://example.test/source")
++        assert found["id"] == note["id"]
++        assert found["knowledge_base_id"] == workspace
++        assert await repo.get_by_source_url("https://example.test/missing") is None
++    finally:
++        await db.close()

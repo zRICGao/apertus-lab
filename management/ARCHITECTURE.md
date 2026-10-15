@@ -1,5 +1,11 @@
 # 当前架构与构筑顺序
 
+## 2026-10-15：v3 当前实现
+
+当前主入口为 8770 端口的双语 React 研究台，FastAPI 与独立 worker 通过 SQLite WAL 任务/证据账本协作。Planner、Mutator、Critic、Judge、Defender、Reporter 和 Target 分开会话，共享全局 10 并行及阶段额度；先覆盖种子，再执行有界反馈扩展、冻结确认、开发/留出防御对比、人工审核和导出。完整架构图、参数与操作见 [WORKBENCH_V3.md](WORKBENCH_V3.md)。
+
+完整原版 LLM Wiki 在 3000/8000 运行，使用同一知识工作区；同步是显式、幂等的候选写入，带来源哈希和范围。历史只读 8765 工作台、BASIC CLI 与冻结发布包继续独立。旧 BASIC 候选不会自动转成 v3 finding；完整 BreachWeave UI 不是 v3 的调度依赖。下面的“待实现”描述属于历史基线，最新验收见 [STATUS](STATUS.md)。
+
 更新：2026-10-07。本文件区分现有实现和后续目标；本阶段先完善架构，不设计新实验。
 
 ```mermaid

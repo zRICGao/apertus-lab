@@ -13,3 +13,10 @@ experiments/runtime-state/
 **/.pytest_cache/
 **/.ruff_cache/
 **/*.egg-info/
+workbench/research-ui/dist/
+workbench/research-ui/.vite/
+output/workbench/
+experiments/wiki-workspace/sources/research-campaign-*.json
+experiments/wiki-workspace/wiki/research-campaign-*.md
+experiments/wiki-workspace/sources/research-imports/
+experiments/wiki-workspace/v3-architecture-acceptance.md

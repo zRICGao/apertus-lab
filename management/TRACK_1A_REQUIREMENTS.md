@@ -1,5 +1,11 @@
 # Track 1A 要求核验记录
 
+## 2026-10-15 更新
+
+重新读取[官方 Track 1A README](https://github.com/HackApertus/project-template/blob/main/track_1a/README.md)：PDF 限制是正文最多 6 页，参考文献不计入；此前“全部页数计入”的本地解释更正。模型范围、5 个 finding 上限、clean-checkout `make run`、独立 finding schema、私有与授权许可仍按官方要求处理。
+
+v3 研究导出已实现 track_1a 目录、两级 Makefile、独立 target replay、数据大小闸门和人工 confirmed 才可导出 finding；本次 mock 包根 `make run` 验收通过。研究 ZIP 不等于正式比赛提交：没有真实 confirmed finding 或最终 PDF，评审权限、上游 schema 语法兼容与 T&C 完整核验仍是提交前独立事项。官方 T&C 本次 web 文本提取仍为空，不推定读取成功。下文保留 10 月 6 日基线。
+
 核验日期：2026-10-06。官方来源：[模板固定版本](https://github.com/HackApertus/project-template/tree/7f2382275461baf3fa6c8855d157d86abffe9f0e/track_1a)。本地原件位于 submission/project-template，未修改。
 
 ## 已核实

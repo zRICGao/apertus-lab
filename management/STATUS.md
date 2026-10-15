@@ -2,7 +2,7 @@
 
 ## 当前项目仓库同步（2026-10-15）
 
-- 用户授权推送当前项目；已核验 Prototype/main 基线并整理 v3 平台、修复与管理资料，用户随后明确回复“上传到PROTOTYPE”，目标授权已补齐，继续提交/推送。origin 的 Hackapertus 返回不存在，保留配置并显式使用历史可用 Prototype URL。
+- 用户授权推送当前项目；已核验 Prototype/main 基线并整理 v3 平台、修复与管理资料，用户随后明确回复“上传到PROTOTYPE”，已将68个文件提交为 `acd6636` 并快进推送至 `Prototype/main`，远端哈希核对一致。origin 的 Hackapertus 返回不存在，保留配置并显式使用历史可用 Prototype URL。
 - 本轮14项公平性/安全离线回归通过，JSON解析与敏感值检查通过；Wiki修复和回归以补丁纳入，BreachWeave本地删除标记保留。推送结果以 Git 回执为准，详见 `evidence/project-push-2026-10-15.md`。
 
 ## v3 并行启发式研究架构（2026-10-15，最新）

@@ -2,7 +2,7 @@
 
 | ID | 阶段 | 任务 | 依赖 | 状态 | 验收 / 证据 |
 |---|---|---|---|---|---|
-| SYNC20261015 | 仓库同步 | 提交当前项目并推送 Prototype/main | 用户授权 | doing（用户已明确授权Prototype） | evidence/project-push-2026-10-15.md；14项回归通过 |
+| SYNC20261015 | 仓库同步 | 提交当前项目并推送 Prototype/main | 用户授权 | done（推送及远端核验通过） | evidence/project-push-2026-10-15.md；14项回归通过 |
 | V3007 | 方法说明 | 核对实际流程、数据链、违规/采样/验证/外推并可视化 | 用户要求解释当前行为 | done（源码核对） | WORKFLOW_AND_EVIDENCE.md；11种交互情形展示通过，无模型调用 |
 | V3008 | P4–P6 | 开放题标注后补跑防御、候选机制分组及统计图表报告 | V3001、方法复核 | todo | 当前每方向一候选、防御只首个候选；结束后标注不自动重开防御；HTML报告仍文字/JSON |
 | V3001 | P2–P6 | 按计划实现 v3 并行启发式研究架构及双语 UI | 用户批准架构实施 | done（离线交付） | WORKBENCH_V3.md；98 Python + 4 UI；Docker API/worker、导出包 make run 与断网 replay 通过 |

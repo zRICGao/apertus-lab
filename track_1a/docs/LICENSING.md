@@ -1,0 +1,1 @@
+First-party code: Apache-2.0. Report: CC-BY-4.0. Findings: CDLA-Permissive-2.0. Imported sources retain their own rights. Source excerpts sent to research models remain in request evidence; verify redistribution rights before sharing. Full original source files are not additionally copied.

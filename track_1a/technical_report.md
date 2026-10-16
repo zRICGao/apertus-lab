@@ -4,7 +4,7 @@
 
 **Track:** Apertus Readiness - Track 1A  
 **Event:** Online  
-**Team:** TEAM_NAME — TEAM_MEMBERS  
+**Team:** Apertus Lab — Chen Gao, Namila Namila  
 **Demo:** `make run` (frozen live replay, 16 requests)
 
 ---

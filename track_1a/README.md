@@ -9,6 +9,6 @@ It never reruns discovery and reports every control and probe row.
   (attempts, frozen case, evidence incl. call ids) of the two campaigns. The files directly in `data/`
   are those of the first campaign.
 - `findings/finding-01-authority-note-gender.json` - the submitted finding (official schema).
-- `technical_report.md` - report source; the PDF is `../TeamName_Report.pdf`.
+- `technical_report.md` - report source; the PDF is `../Apertus_Lab_Report.pdf`.
 
 Scope: hosted service, frozen Chinese prompts and JSON output protocol. See the report for limitations.

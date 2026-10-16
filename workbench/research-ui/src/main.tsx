@@ -4,6 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import {
   Activity,
   ArrowRight,
+  Brain,
   BookOpen,
   Check,
   ChevronRight,
@@ -14,13 +15,20 @@ import {
   Globe,
   Layers3,
   Link2,
+  History,
+  Languages,
+  Pencil,
   Pause,
   Play,
   Plus,
   Search,
+  Save,
+  Send,
   ShieldCheck,
   Square,
   Terminal,
+  Trash2,
+  Wand2,
   X,
 } from "lucide-react";
 import { api, label, rate, type Data } from "./api";
@@ -29,7 +37,7 @@ import "./style.css";
 function App() {
   const [en, setEn] = useState(localStorage.getItem("lang") === "en");
   const t = (zh: string, english: string) => (en ? english : zh);
-  const [tab, setTab] = useState("research");
+  const [tab, setTab] = useState("probe");
   const [config, setConfig] = useState<Data>();
   const [health, setHealth] = useState<Data>();
   const [campaigns, setCampaigns] = useState<Data[]>([]);
@@ -57,6 +65,23 @@ function App() {
   const eventTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
+  const [models, setModels] = useState<Data>({ profiles: [] });
+  const [domains, setDomains] = useState<Data[]>([]);
+  const [probeDomain, setProbeDomain] = useState<Data>();
+  const [probePrompt, setProbePrompt] = useState("");
+  const [probeLanguages, setProbeLanguages] = useState(["zh", "en", "de"]);
+  const [probeLanguageInput, setProbeLanguageInput] = useState("");
+  const [probeJob, setProbeJob] = useState<Data>();
+  const [probeSuggestion, setProbeSuggestion] = useState<Data>();
+  const [probeConfirm, setProbeConfirm] = useState<"suggest" | "test" | "analysis">();
+  const [records, setRecords] = useState<Data[]>([]);
+  const [recordFilter, setRecordFilter] = useState("");
+  const [recordDomain, setRecordDomain] = useState("");
+  const [recordLanguage, setRecordLanguage] = useState("");
+  const [probeTarget, setProbeTarget] = useState("");
+  const [probeAssistant, setProbeAssistant] = useState("");
+  const [modelFormOpen, setModelFormOpen] = useState(false);
+  const [editingModel, setEditingModel] = useState<string>();
 
   async function refresh(id = selectedRef.current) {
     const [list, h] = await Promise.all([api("/campaigns"), api("/health")]);
@@ -65,12 +90,17 @@ function App() {
     if (id) setState(await api("/campaigns/" + id));
   }
   useEffect(() => {
-    Promise.all([api("/config"), api("/templates"), api("/knowledge")])
-      .then(([c, templates, k]) => {
+    Promise.all([api("/config"), api("/templates"), api("/knowledge"), api("/models"), api("/probe/domains"), api("/probe/records")])
+      .then(([c, templates, k, m, d, r]) => {
         setConfig(c);
         setCards(templates.cards);
         setPrompts(templates.prompts);
         setSources(k.sources);
+        setModels(m);
+        setDomains(d.domains);
+        setRecords(r.records);
+        setProbeTarget(m.target_model_id);
+        setProbeAssistant(m.assistant_model_id);
       })
       .catch((e) => setError(e.message));
     refresh().catch((e) => setError(e.message));
@@ -95,6 +125,13 @@ function App() {
       clearTimeout(eventTimer.current);
     };
   }, []);
+  useEffect(() => {
+    if (!probeJob?.id) return;
+    const timer = setInterval(() => {
+      api(`/probe/jobs/${probeJob.id}`).then(setProbeJob).catch(() => undefined);
+    }, 900);
+    return () => clearInterval(timer);
+  }, [probeJob?.id]);
   useEffect(() => {
     selectedRef.current = selected;
     if (selected) {
@@ -131,6 +168,67 @@ function App() {
   const statusBadge = (status: string) => (
     <span className={"badge " + status}>{label(status, en)}</span>
   );
+  const activeProfile = (id: string) => (models.profiles || []).find((p: Data) => p.id === id);
+  const languageName = (code: string) => ({ zh: t("中文", "Chinese"), en: "English", de: "Deutsch" }[code] || code);
+  const selectDomain = (domain: Data) => {
+    setProbeDomain(domain);
+    setProbePrompt("");
+    setProbeSuggestion(undefined);
+    setProbeJob(undefined);
+  };
+  const askSuggestion = () => setProbeConfirm("suggest");
+  const runSuggestion = () => act(async () => {
+    const result = await api("/probe/suggestions", { domain_id: probeDomain!.id, context: probePrompt, assistant_model_id: probeAssistant, confirmed: true });
+    setProbeSuggestion(result.suggestion);
+    if (result.suggestion?.prompt) setProbePrompt(result.suggestion.prompt);
+    setProbeConfirm(undefined);
+  });
+  const createProbe = () => act(async () => {
+    const result = await api("/probe/jobs", { domain_id: probeDomain!.id, prompt: probePrompt, languages: probeLanguages, target_model_id: probeTarget, assistant_model_id: probeAssistant });
+    setProbeJob(await api(`/probe/jobs/${result.id}`));
+    setNotice(t("翻译任务已加入本地 worker。", "Translation job queued for the local worker."));
+  });
+  const startProbeTest = () => act(async () => {
+    const next = await api(`/probe/jobs/${probeJob!.id}/start-test`, { confirmed: true });
+    setProbeJob(next);
+    setProbeConfirm(undefined);
+  });
+  const saveProbe = () => act(async () => {
+    const result = await api(`/probe/jobs/${probeJob!.id}/save`, {});
+    setNotice(t(`已保存记录 ${result.id}`, `Saved record ${result.id}`));
+    setRecords((await api("/probe/records")).records);
+  });
+  const discardProbe = () => act(async () => {
+    setProbeJob(await api(`/probe/jobs/${probeJob!.id}/discard`, {}));
+    setNotice(t("结果已忽视；调用审计元数据仍保留。", "Result discarded; call audit metadata is retained."));
+  });
+  const analyzeProbe = () => act(async () => {
+    await api(`/probe/jobs/${probeJob!.id}/analysis`, { assistant_model_id: probeAssistant, confirmed: true });
+    setProbeJob(await api(`/probe/jobs/${probeJob!.id}`));
+    setProbeConfirm(undefined);
+  });
+  const reanalyzeRecord = (record: Data) => act(async () => {
+    const job = await api(`/probe/jobs/${record.job}`);
+    setProbeJob(job);
+    setProbePrompt(job.prompt);
+    setProbeDomain(domains.find((domain: Data) => domain.id === record.domain_id));
+    setTab("probe");
+    setProbeConfirm("analysis");
+  });
+  const refreshRecords = () => api("/probe/records").then((r) => setRecords(r.records)).catch(() => undefined);
+  const addModel = () => act(async () => {
+    const form = document.getElementById("model-form") as HTMLFormElement;
+    const values = Object.fromEntries(new FormData(form).entries());
+    const next = await api("/models", values);
+    setModels(next); setProbeTarget(next.target_model_id); setProbeAssistant(next.assistant_model_id); setModelFormOpen(false); form.reset();
+  });
+  const removeModel = (id: string) => act(async () => { const next = await api(`/models/${id}`, {}, "DELETE"); setModels(next); setProbeTarget(next.target_model_id); setProbeAssistant(next.assistant_model_id); });
+  const updateModel = (id: string, form: HTMLFormElement) => act(async () => {
+    const values = Object.fromEntries(new FormData(form).entries());
+    const next = await api(`/models/${id}`, values, "PATCH");
+    setModels(next); setProbeTarget(next.target_model_id); setProbeAssistant(next.assistant_model_id); setEditingModel(undefined); form.reset();
+  });
+  const selectModel = (id: string, role: "target" | "assistant") => act(async () => { const next = await api(`/models/${id}/select-${role}`, {}); setModels(next); if (role === "target") setProbeTarget(id); else setProbeAssistant(id); });
   const openWizard = () => {
     setSpec(structuredClone(config?.defaults));
     setWizard(true);
@@ -163,7 +261,9 @@ function App() {
         </div>
         <nav aria-label="Main navigation">
           {[
+            ["probe", Send, t("Probe 探索", "Probe")],
             ["research", FlaskConical, t("研究任务", "Research")],
+            ["records", History, t("本地记录", "Records")],
             ["templates", Layers3, t("研究模板", "Template library")],
             ["knowledge", BookOpen, t("知识与来源", "Knowledge")],
             ["settings", Terminal, t("配置与方法", "Configuration")],
@@ -230,6 +330,70 @@ function App() {
               <X size={15} />
             </button>
           </div>
+        )}
+
+        {tab === "probe" && (
+          <>
+            <div className="page-heading probe-heading">
+              <div>
+                <h1>{t("Probe：从一个问题开始", "Probe: start with one question")}</h1>
+                <p>{t("选择一个模型风险领域，设计可复现的 prompt，并比较不同语言下的真实回答。", "Choose a model-risk area, design a reproducible prompt, and compare real answers across languages.")}</p>
+              </div>
+              <div className="probe-target-badge"><Brain size={17} /><span>{activeProfile(probeTarget)?.name || t("未配置目标模型", "No target model")}</span></div>
+            </div>
+            {!probeDomain ? (
+              <>
+                <div className="probe-callout panel"><ShieldCheck size={18} /><div><strong>{t("证据先于结论", "Evidence before interpretation")}</strong><p>{t("这些领域用于红队筛查，不自动代表真实危害或正式发现。每次外部调用都会显示并请求确认。", "These domains are screening tools, not automatic findings. Every external call is shown and confirmed before it runs.")}</p></div></div>
+                <div className="probe-domain-grid">
+                  {domains.map((domain) => (
+                    <button className="probe-domain" key={domain.id} onClick={() => selectDomain(domain)}>
+                      <div className="probe-domain-icon"><ShieldCheck size={19} /></div>
+                      <h2>{domain.title[en ? "en" : "zh"]}</h2>
+                      <p>{domain.description[en ? "en" : "zh"]}</p>
+                      <span>{t("开始探索", "Explore") } <ArrowRight size={14} /></span>
+                    </button>
+                  ))}
+                </div>
+                <section className="panel probe-recent">
+                  <div className="section-title"><History size={16} /><h3>{t("最近记录", "Recent records")}</h3><button className="quiet" onClick={() => setTab("records")}>{t("查看全部", "View all")} <ArrowRight size={14} /></button></div>
+                  {!records.length ? <p className="muted">{t("保存后的 Probe 结果会出现在这里。", "Saved Probe results will appear here.")}</p> : records.slice(0, 3).map((record) => <button className="record-row" key={record.id} onClick={() => setTab("records")}><strong>{record.domain_id}</strong><span>{record.languages?.join(" / ")} · {new Date(record.created * 1000).toLocaleString()}</span></button>)}
+                </section>
+              </>
+            ) : (
+              <section className="probe-workspace">
+                <button className="back-link" onClick={() => setProbeDomain(undefined)}><ChevronRight size={14} className="back-chevron" />{t("返回领域", "Back to domains")}</button>
+                <div className="probe-layout">
+                  <article className="panel probe-guide">
+                    <span className="mode">{probeDomain.id.replaceAll("_", " ")}</span>
+                    <h2>{probeDomain.title[en ? "en" : "zh"]}</h2>
+                    <p>{probeDomain.why[en ? "en" : "zh"]}</p>
+                    <div className="guide-example"><strong>{t("示例", "Example")}</strong><p>{probeDomain.example[en ? "en" : "zh"]}</p></div>
+                    <div className="guide-limits"><strong>{t("分析维度", "Analysis dimensions")}</strong><span>{probeDomain.dimensions.join(" · ")}</span></div>
+                  </article>
+                  <article className="panel probe-composer">
+                    <div className="section-title"><Send size={16} /><h3>{t("设计测试 prompt", "Design a test prompt")}</h3></div>
+                    <textarea className="probe-textarea" value={probePrompt} onChange={(e) => setProbePrompt(e.target.value)} placeholder={t("描述你想测试的行为、上下文和语言……", "Describe the behavior, context and language you want to test…")} />
+                    <div className="probe-form-row">
+                      <label>{t("被测模型", "Target model")}<select value={probeTarget} onChange={(e) => setProbeTarget(e.target.value)}>{(models.profiles || []).map((p: Data) => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
+                      <label>{t("建议/分析模型", "Assistant model")}<select value={probeAssistant} onChange={(e) => setProbeAssistant(e.target.value)}>{(models.profiles || []).map((p: Data) => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
+                    </div>
+                    <div className="language-picker"><span><Languages size={15} />{t("测试语言", "Test languages")}</span>{probeLanguages.map((language) => <button type="button" className="language-chip" key={language} onClick={() => setProbeLanguages((old) => old.filter((x) => x !== language))}>{languageName(language)} <X size={12} /></button>)}<input value={probeLanguageInput} onChange={(e) => setProbeLanguageInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); const v = probeLanguageInput.trim().toLowerCase(); if (v && !probeLanguages.includes(v) && probeLanguages.length < 12) setProbeLanguages((old) => [...old, v]); setProbeLanguageInput(""); } }} placeholder="add code" aria-label={t("添加语言代码", "Add language code")} /></div>
+                    <div className="composer-actions"><button onClick={askSuggestion} disabled={!probePrompt || busy || !probeAssistant}><Wand2 size={15} />{t("让模型帮我设计", "Generate with model")}</button><button className="primary" onClick={createProbe} disabled={!probePrompt || !probeLanguages.length || busy || !probeTarget}><Send size={15} />{t("开始翻译", "Start translation")}</button></div>
+                    {probeSuggestion && <details className="suggestion" open><summary>{t("模型建议", "Model suggestion")}</summary><pre>{JSON.stringify(probeSuggestion, null, 2)}</pre></details>}
+                  </article>
+                </div>
+                {probeJob && <ProbeResults job={probeJob} en={en} t={t} busy={busy} onTest={() => setProbeConfirm("test")} onSave={saveProbe} onDiscard={discardProbe} onAnalyze={() => setProbeConfirm("analysis")} />}
+              </section>
+            )}
+          </>
+        )}
+
+        {tab === "records" && (
+          <>
+            <div className="page-heading"><div><h1>{t("本地 Probe 记录", "Local Probe records")}</h1><p>{t("查看保存的 prompt、翻译、回答和分析，不把模型意见混同为事实。", "Inspect saved prompts, translations, answers and analyses without treating model commentary as fact.")}</p></div><button onClick={refreshRecords}><History size={15} />{t("刷新", "Refresh")}</button></div>
+            <div className="record-filters"><div className="search"><Search size={16} /><input value={recordFilter} onChange={(e) => setRecordFilter(e.target.value)} placeholder={t("按领域、模型或记录 ID 搜索", "Search domain, model or record ID")} /></div><select value={recordDomain} onChange={(e) => setRecordDomain(e.target.value)} aria-label={t("按领域筛选", "Filter by domain")}><option value="">{t("所有领域", "All domains")}</option>{domains.map((d: Data) => <option key={d.id} value={d.id}>{d.title[en ? "en" : "zh"]}</option>)}</select><select value={recordLanguage} onChange={(e) => setRecordLanguage(e.target.value)} aria-label={t("按语言筛选", "Filter by language")}><option value="">{t("所有语言", "All languages")}</option>{Array.from(new Set(records.flatMap((r) => r.languages || []))).map((language) => <option key={language} value={language}>{languageName(language)}</option>)}</select></div>
+            <section className="panel records-panel">{records.filter((r) => (!recordDomain || r.domain_id === recordDomain) && (!recordLanguage || r.languages?.includes(recordLanguage)) && JSON.stringify(r).toLowerCase().includes(recordFilter.toLowerCase())).map((record) => <article className="record-card" key={record.id}><div><span className="badge completed">{record.domain_id}</span><small>{new Date(record.created * 1000).toLocaleString()}</small></div><h2>{record.prompt}</h2><p>{record.languages?.join(" / ")} · {record.target_model_id}</p><div className="record-actions"><a className="button" href={`/api/v1/probe/records/${record.id}/export?format=json`} download><Download size={14} />JSON</a><a className="button" href={`/api/v1/probe/records/${record.id}/export?format=markdown`} download><FileText size={14} />Markdown</a><button onClick={() => reanalyzeRecord(record)} disabled={busy}><Brain size={14} />{t("重新分析", "Re-analyze")}</button></div><details><summary>{t("查看证据", "Inspect evidence")}</summary><pre>{JSON.stringify(record, null, 2)}</pre></details></article>)}{!records.length && <div className="empty small"><History size={28} /><p>{t("还没有保存的结果。", "No saved results yet.")}</p></div>}</section>
+          </>
         )}
 
         {tab === "research" && (
@@ -1179,6 +1343,12 @@ function App() {
                 </p>
               </section>
             </div>
+            <section className="panel settings-panel model-registry-panel">
+              <div className="section-title"><Brain size={16} /><h3>{t("Probe 模型配置", "Probe model profiles")}</h3><button className="primary" onClick={() => setModelFormOpen(!modelFormOpen)}><Plus size={15} />{t("添加模型", "Add model")}</button></div>
+              <p className="muted">{t("密钥只保存于本地 WORKBENCH_DATA/models.json，界面不会回显。Probe 使用 OpenAI-compatible chat completions。", "Keys stay in local WORKBENCH_DATA/models.json and are never echoed. Probe uses OpenAI-compatible chat completions.")}</p>
+              {(models.profiles || []).map((p: Data) => <React.Fragment key={p.id}><div className="model-row"><div><strong>{p.name}</strong><small>{p.model} · {p.base_url} · {p.credentials_present ? t("凭据已保存", "Credential saved") : t("缺少凭据", "Credential missing")}</small></div><div className="model-row-actions"><button className={models.target_model_id === p.id ? "chosen" : ""} onClick={() => selectModel(p.id, "target")}>{t("目标", "Target")}</button><button className={models.assistant_model_id === p.id ? "chosen" : ""} onClick={() => selectModel(p.id, "assistant")}>{t("辅助", "Assistant")}</button><button aria-label={t("编辑模型", "Edit model")} onClick={() => setEditingModel(editingModel === p.id ? undefined : p.id)}><Pencil size={14} /></button><button aria-label={t("删除模型", "Delete model")} onClick={() => removeModel(p.id)} disabled={(models.profiles || []).length <= 1}><Trash2 size={14} /></button></div></div>{editingModel === p.id && <form className="model-form model-edit-form" onSubmit={(e) => { e.preventDefault(); updateModel(p.id, e.currentTarget); }}><label>{t("显示名称", "Display name")}<input name="name" defaultValue={p.name} required /></label><label>{t("模型 ID", "Model ID")}<input name="model" defaultValue={p.model} required /></label><label>{t("Base URL", "Base URL")}<input name="base_url" type="url" defaultValue={p.base_url} required /></label><label>{t("新 API key（留空保留）", "New API key (blank keeps current)")}<input name="api_key" type="password" autoComplete="off" /></label><div className="modal-actions"><button type="button" onClick={() => setEditingModel(undefined)}>{t("取消", "Cancel")}</button><button className="primary" disabled={busy}><Save size={15} />{t("更新模型", "Update model")}</button></div></form>}</React.Fragment>)}
+              {modelFormOpen && <form id="model-form" className="model-form" onSubmit={(e) => { e.preventDefault(); addModel(); }}><label>{t("显示名称", "Display name")}<input name="name" required placeholder="Apertus 70B" /></label><label>{t("模型 ID", "Model ID")}<input name="model" required placeholder="provider/model" /></label><label>{t("Base URL", "Base URL")}<input name="base_url" type="url" required placeholder="https://api.example.com/v1" /></label><label>{t("API key", "API key")}<input name="api_key" type="password" required autoComplete="off" /></label><div className="modal-actions"><button type="button" onClick={() => setModelFormOpen(false)}>{t("取消", "Cancel")}</button><button className="primary" disabled={busy}><Save size={15} />{t("保存模型", "Save model")}</button></div></form>}
+            </section>
             <section className="panel settings-panel">
               <h2>{t("版本化角色提示词", "Versioned role prompts")}</h2>
               {Object.entries(prompts).map(([role, prompt]) => (
@@ -1196,6 +1366,25 @@ function App() {
           <span>·</span> LOCAL FIRST
         </footer>
       </main>
+
+      <Modal
+        open={!!probeConfirm}
+        onOpenChange={(open) => !open && setProbeConfirm(undefined)}
+        title={probeConfirm === "suggest" ? t("确认调用建议模型", "Confirm suggestion call") : probeConfirm === "test" ? t("确认发送多语言测试", "Confirm multi-language test") : t("确认调用分析模型", "Confirm analysis call")}
+        description={t("这是一次真实的第三方 API 调用。确认后才会发送。", "This is a real third-party API call. It will be sent only after confirmation.")}
+      >
+        <div className="confirmation-summary">
+          <p><strong>{t("领域", "Domain")}</strong>{probeDomain?.title?.[en ? "en" : "zh"] || "—"}</p>
+          <p><strong>{t("模型", "Model")}</strong>{activeProfile(probeConfirm === "suggest" ? probeAssistant : probeConfirm === "analysis" ? probeAssistant : probeTarget)?.name}</p>
+          <p><strong>{t("地址", "Endpoint")}</strong>{activeProfile(probeConfirm === "suggest" ? probeAssistant : probeConfirm === "analysis" ? probeAssistant : probeTarget)?.base_url}</p>
+          <p><strong>{t("预计请求", "Requests")}</strong>{probeConfirm === "test" ? probeLanguages.length : 1}</p>
+          <p><strong>{t("语言", "Languages")}</strong>{probeConfirm === "test" ? probeLanguages.join(", ") : t("模型默认", "Model default")}</p>
+          <p><strong>{t("输入摘要", "Input summary")}</strong>{probePrompt.length > 180 ? probePrompt.slice(0, 180) + "…" : probePrompt || "—"}</p>
+          <p><strong>{t("保存位置", "Storage")}</strong>WORKBENCH_DATA/probe-records</p>
+          <p><strong>{t("费用提示", "Cost notice")}</strong>{t("第三方服务可能收费；请确认其配额与计费规则。", "The third-party service may charge for requests; check its quota and billing terms.")}</p>
+        </div>
+        <div className="modal-actions"><button onClick={() => setProbeConfirm(undefined)}>{t("取消", "Cancel")}</button><button className="primary" disabled={busy} onClick={probeConfirm === "suggest" ? runSuggestion : probeConfirm === "test" ? startProbeTest : analyzeProbe}><Check size={15} />{t("确认调用", "Confirm call")}</button></div>
+      </Modal>
 
       <Modal
         open={wizard}
@@ -1777,6 +1966,21 @@ function App() {
       </Modal>
     </div>
   );
+}
+
+function ProbeResults({ job, en, t, busy, onTest, onSave, onDiscard, onAnalyze }: { job: Data; en: boolean; t: (zh: string, en: string) => string; busy: boolean; onTest: () => void; onSave: () => void; onDiscard: () => void; onAnalyze: () => void }) {
+  const translationCalls = (job.calls || []).filter((call: Data) => call.phase === "translation");
+  const testCalls = (job.calls || []).filter((call: Data) => call.phase === "test");
+  const labels: Record<string, string> = { waiting_confirmation: t("等待测试确认", "Waiting for test confirmation"), running: t("运行中", "Running"), completed: t("已完成", "Completed"), partial: t("部分完成", "Partial"), failed: t("失败", "Failed"), discarded: t("已忽视", "Discarded"), unknown: t("未知结果", "Unknown") };
+  const responseLabel = (response: Data | undefined, ready: boolean) => !response ? (ready ? t("待测试", "Ready") : t("待翻译", "Waiting")) : response.valid ? t("已返回", "Returned") : response.reason || t("失败", "Failed");
+  return <section className="panel probe-results">
+    <div className="detail-heading"><div><div className="eyebrow">{job.id}</div><h2>{t("Probe 结果", "Probe results")}</h2><span className="badge running">{labels[job.status] || job.status}</span></div><div className="probe-progress">{job.progress?.done || 0}/{job.progress?.total || 0}</div></div>
+    <div className="probe-original"><strong>{t("原始 prompt", "Original prompt")}</strong><pre>{job.prompt}</pre></div>
+    <div className="probe-result-grid">{job.languages.map((language: string) => { const translation = translationCalls.find((c: Data) => c.language === language); const answer = testCalls.find((c: Data) => c.language === language); const translationText = translation?.response?.text; return <article className="probe-result" key={language}><div className="result-header"><h3>{language}</h3><span className={"badge " + (answer?.response?.valid ? "completed" : translation?.response?.valid ? "running" : "needs_review")}>{answer?.response?.valid ? t("已返回", "Returned") : translation?.response?.valid ? t("待测试", "Ready") : translation?.response?.reason || t("待翻译", "Waiting")}</span></div><label>{t("翻译后的 prompt", "Translated prompt")}</label><pre>{translationText || t("等待 worker 返回翻译。", "Waiting for worker translation.")}</pre><label>{t("模型回答", "Model response")}</label><pre>{answer?.response?.text || (answer?.response?.reason ? answer.response.reason : t("尚未发送测试。", "Test not sent yet."))}</pre><small>{answer?.response?.model || translation?.response?.model || ""}</small></article>; })}</div>
+    <details className="probe-call-audit"><summary>{t("查看每次调用的实际输入、状态和请求 ID", "Inspect actual inputs, states and request IDs")}</summary><pre>{JSON.stringify((job.calls || []).map((call: Data) => ({ id: call.id, phase: call.phase, language: call.language, status: call.status, request: call.request, response: call.response })), null, 2)}</pre></details>
+    {job.analysis && <div className="analysis-result"><div className="section-title"><Brain size={16} /><h3>{t("分析结果", "Analysis")}</h3></div><pre>{JSON.stringify(job.analysis.analysis || job.analysis, null, 2)}</pre></div>}
+    <div className="probe-result-actions">{job.status === "waiting_confirmation" && <button className="primary" onClick={onTest} disabled={busy}><Send size={15} />{t("确认并开始测试", "Confirm and test")}</button>}{["completed", "partial"].includes(job.status) && !job.saved && <><button className="primary" onClick={onSave} disabled={busy}><Save size={15} />{t("保存结果", "Save results")}</button><button onClick={onDiscard} disabled={busy}><Trash2 size={15} />{t("忽视结果", "Discard")}</button></>}{["completed", "partial"].includes(job.status) && job.saved && !job.analysis && <button onClick={onAnalyze} disabled={busy}><Brain size={15} />{t("调用模型分析", "Analyze with model")}</button>}{job.saved && <span className="muted">{t("结果已保存。", "Result saved.")}</span>}{job.status === "discarded" && <span className="muted">{t("已忽视；审计元数据仍保留。", "Discarded; audit metadata retained.")}</span>}</div>
+  </section>;
 }
 
 function Metric({

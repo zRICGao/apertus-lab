@@ -4,6 +4,20 @@
 
 当前开发入口是 [v3 工作台使用与研究标准](management/WORKBENCH_V3.md)。包含双语 React UI、FastAPI、独立持久 worker、跨任务最多 10 个在途请求、27 张三语研究卡、启发式变体、冻结确认、四组防御比较、人工审核和独立 Docker replay 导出。默认模拟；启动服务不调用模型。
 
+### Probe 交互式测试
+
+Probe 是独立于 campaign 的多语言红队工作流。它允许在设置页保存多个 OpenAI-compatible 模型，选择一个目标模型和一个辅助模型，然后从偏见、公平、错误前提、谄媚、伤害性语言、隐私和指令边界等领域设计测试。翻译阶段会为选定语言建立独立任务；测试、建议和分析调用均在 UI 中显示第三方模型、地址、语言和请求数量，并在用户确认后发送。翻译失败只影响对应语言，worker 重启不会重发未知调用。
+
+```powershell
+make workbench
+# 或
+docker compose -f compose.workbench.yml up --build
+```
+
+打开 `http://127.0.0.1:8770`，进入 Probe 或 Settings。首次启动会从被忽略的根目录 `.env` 发现默认 Apertus 70B；模型配置和 SQLite 账本保存在 `WORKBENCH_DATA`。密钥只在后端本地使用，不出现在 API 响应、浏览器存储、事件、记录导出或 Git 中。保存结果后可在 Records 中按领域和语言筛选，并导出 JSON 或 Markdown；“忽视”只保留不可变审计元数据，不进入普通记录。
+
+Probe 的接口和状态约定见 [Probe v1 工作流](management/PROBE_V1.md)。自动分析是证据整理，不会自动创建 finding、推断训练原因、总体发生率或法律结论；开放式结果仍需人工复核。
+
 ```powershell
 docker compose -f compose.workbench.yml up --build -d
 # 本机已安装依赖时：python scripts/workbench.py serve

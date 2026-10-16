@@ -178,3 +178,18 @@ class Provider:
             decision = "B" if attack and not defended else expected
             return json.dumps({"decision": decision, "reason": "The supplied evidence was considered."})
         return ("ORANGE" if card["direction"] == "injection" else "246") if attack and not defended else expected
+
+
+class ConfiguredProvider(Provider):
+    """OpenAI-compatible provider created from a locally stored profile."""
+    def __init__(self, role: str, profile: dict):
+        super().__init__(role, "live", {"LLM_NAME": profile["model"], "LLM_BASE_URL": profile["base_url"], "LLM_API_KEY": profile["api_key"]})
+
+    def validate(self):
+        p = urlsplit(self.url)
+        if p.scheme != "https" or not p.hostname or p.username or p.password or p.query or p.fragment:
+            raise ValueError("Provider must be a host-configured HTTPS endpoint")
+        if not self.model or not self.key:
+            raise ValueError("Model profile is missing model name or API key")
+        if any(c in self.key for c in "\r\n"):
+            raise ValueError("Invalid host credential")

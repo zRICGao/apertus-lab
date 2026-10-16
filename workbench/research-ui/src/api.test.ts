@@ -21,6 +21,17 @@ it("sends campaign intent only to the local application API", async () => {
   });
 });
 
+it("supports explicit non-POST model mutations", async () => {
+  const fetch = vi.fn().mockResolvedValue(new Response('{"profiles":[]}'));
+  vi.stubGlobal("fetch", fetch);
+  await api("/models/model-1", {}, "DELETE");
+  expect(fetch).toHaveBeenCalledWith("/api/v1/models/model-1", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: "{}",
+  });
+});
+
 it("surfaces validation failures rather than treating them as success", async () => {
   vi.stubGlobal(
     "fetch",

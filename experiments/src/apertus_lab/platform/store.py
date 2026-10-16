@@ -46,10 +46,25 @@ class Store:
                   payload TEXT NOT NULL, hash TEXT NOT NULL, UNIQUE(campaign,kind));
                 CREATE TABLE IF NOT EXISTS events(seq INTEGER PRIMARY KEY AUTOINCREMENT, campaign TEXT NOT NULL,
                   kind TEXT NOT NULL, payload TEXT NOT NULL, created REAL NOT NULL);
+                CREATE TABLE IF NOT EXISTS probe_jobs(id TEXT PRIMARY KEY, domain TEXT NOT NULL, prompt TEXT NOT NULL,
+                  languages TEXT NOT NULL, target_model_id TEXT NOT NULL, assistant_model_id TEXT NOT NULL,
+                  status TEXT NOT NULL, created REAL NOT NULL, updated REAL NOT NULL, discarded INTEGER NOT NULL DEFAULT 0,
+                  saved INTEGER NOT NULL DEFAULT 0, analysis_status TEXT NOT NULL DEFAULT 'not_requested');
+                CREATE TABLE IF NOT EXISTS probe_tasks(id TEXT PRIMARY KEY, job TEXT NOT NULL REFERENCES probe_jobs(id),
+                  phase TEXT NOT NULL, language TEXT NOT NULL DEFAULT '', payload TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending',
+                  priority INTEGER NOT NULL DEFAULT 10, created REAL NOT NULL, updated REAL NOT NULL);
+                CREATE TABLE IF NOT EXISTS probe_calls(id TEXT PRIMARY KEY, task TEXT NOT NULL UNIQUE REFERENCES probe_tasks(id),
+                  job TEXT NOT NULL, phase TEXT NOT NULL, language TEXT NOT NULL, request TEXT NOT NULL, response TEXT,
+                  request_hash TEXT NOT NULL, response_hash TEXT, status TEXT NOT NULL, created REAL NOT NULL, finished REAL);
+                CREATE TABLE IF NOT EXISTS probe_records(id TEXT PRIMARY KEY, job TEXT NOT NULL UNIQUE REFERENCES probe_jobs(id),
+                  payload TEXT NOT NULL, hash TEXT NOT NULL, created REAL NOT NULL);
+                CREATE TABLE IF NOT EXISTS probe_analyses(id TEXT PRIMARY KEY, job TEXT NOT NULL REFERENCES probe_jobs(id),
+                  payload TEXT NOT NULL, hash TEXT NOT NULL, created REAL NOT NULL);
                 CREATE INDEX IF NOT EXISTS task_queue ON tasks(status,priority,created);
                 CREATE INDEX IF NOT EXISTS calls_campaign ON calls(campaign,stage);
+                CREATE INDEX IF NOT EXISTS probe_task_queue ON probe_tasks(status,priority,created);
             """)
-            for table in ("calls", "results", "reviews", "annotations", "artifacts", "events"):
+            for table in ("calls", "results", "reviews", "annotations", "artifacts", "events", "probe_records", "probe_analyses"):
                 for verb in ("UPDATE", "DELETE"):
                     db.execute(f"CREATE TRIGGER IF NOT EXISTS immutable_{table}_{verb} BEFORE {verb} ON {table} BEGIN SELECT RAISE(ABORT,'immutable evidence'); END")
 
@@ -259,3 +274,153 @@ class Store:
             else:
                 rows = db.execute("SELECT * FROM events WHERE seq>? ORDER BY seq LIMIT 200", (after,)).fetchall()
             return [{**dict(r), "payload": json.loads(r["payload"])} for r in rows]
+
+    def probe_event(self, job: str, kind: str, payload: dict):
+        with self.connect() as db:
+            self.event(db, "probe:" + job, kind, payload)
+
+    def probe_create(self, domain: str, prompt: str, languages: list[str], target: str, assistant: str) -> str:
+        job = uid("probe")
+        now = time.time()
+        with self.connect() as db:
+            db.execute("INSERT INTO probe_jobs VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", (job, domain, prompt, canonical(languages).decode(), target, assistant, "queued", now, now, 0, 0, "not_requested"))
+            for language in languages:
+                task = uid("probe-task")
+                payload = canonical({"job": job, "language": language}).decode()
+                db.execute("INSERT INTO probe_tasks VALUES(?,?,?,?,?,?,?,?,?)", (task, job, "translation", language, payload, "pending", 10, now, now))
+            self.event(db, "probe:" + job, "probe_job_created", {"job": job, "languages": languages})
+            self.event(db, "probe:" + job, "probe_translation_started", {"job": job, "languages": languages})
+        return job
+
+    def probe_get(self, job: str) -> dict:
+        with self.connect() as db:
+            row = db.execute("SELECT * FROM probe_jobs WHERE id=?", (job,)).fetchone()
+            if not row:
+                raise ValueError("Unknown Probe job")
+            out = dict(row); out["languages"] = json.loads(out["languages"])
+            tasks = [dict(r) for r in db.execute("SELECT * FROM probe_tasks WHERE job=? ORDER BY created", (job,))]
+            calls = [dict(r) for r in db.execute("SELECT * FROM probe_calls WHERE job=? ORDER BY created", (job,))]
+            for item in calls:
+                item["request"] = json.loads(item["request"])
+                item["response"] = json.loads(item["response"]) if item["response"] else None
+            out["tasks"], out["calls"] = tasks, calls
+            record = db.execute("SELECT payload FROM probe_records WHERE job=?", (job,)).fetchone()
+            analysis = db.execute("SELECT payload FROM probe_analyses WHERE job=? ORDER BY created DESC LIMIT 1", (job,)).fetchone()
+            out["record"] = json.loads(record[0]) if record else None
+            out["analysis"] = json.loads(analysis[0]) if analysis else None
+            out["progress"] = {"total": len(tasks), "done": sum(t["status"] in {"done", "failed", "unknown"} for t in tasks), "failed": sum(t["status"] in {"failed", "unknown"} for t in tasks)}
+            return out
+
+    def probe_pending(self) -> list[dict]:
+        with self.connect() as db:
+            rows = db.execute("SELECT t.*,j.status AS job_status,j.target_model_id,j.assistant_model_id,j.prompt,j.domain,j.languages FROM probe_tasks t JOIN probe_jobs j ON j.id=t.job WHERE t.status='pending' AND j.status IN ('queued','running') ORDER BY t.priority,t.created").fetchall()
+            return [dict(r) for r in rows]
+
+    def probe_start_test(self, job: str, confirmed: bool):
+        if not confirmed:
+            raise ValueError("Explicit confirmation is required before test calls")
+        with self.connect() as db:
+            row = db.execute("SELECT * FROM probe_jobs WHERE id=?", (job,)).fetchone()
+            if not row or row["status"] in {"discarded", "unknown"}:
+                raise ValueError("Probe job cannot start")
+            existing = db.execute("SELECT count(*) FROM probe_tasks WHERE job=? AND phase='test'", (job,)).fetchone()[0]
+            if existing:
+                return
+            translations = db.execute("SELECT t.language,c.response FROM probe_tasks t JOIN probe_calls c ON c.task=t.id WHERE t.job=? AND t.phase='translation' AND t.status='done'", (job,)).fetchall()
+            if not translations:
+                raise ValueError("No completed translations are available")
+            for item in translations:
+                response = json.loads(item["response"])
+                task = uid("probe-task")
+                payload = canonical({"job": job, "language": item["language"], "translated_prompt": response.get("text", "")}).decode()
+                db.execute("INSERT INTO probe_tasks VALUES(?,?,?,?,?,?,?,?,?)", (task, job, "test", item["language"], payload, "pending", 20, time.time(), time.time()))
+            db.execute("UPDATE probe_jobs SET status='running',updated=? WHERE id=?", (time.time(), job))
+            self.event(db, "probe:" + job, "probe_test_started", {"job": job, "languages": [x["language"] for x in translations]})
+
+    def probe_latest(self, job: str, phase: str, language: str = "") -> dict | None:
+        with self.connect() as db:
+            row = db.execute("SELECT c.response FROM probe_calls c WHERE c.job=? AND c.phase=? AND (?='' OR c.language=?) ORDER BY c.created DESC LIMIT 1", (job, phase, language, language)).fetchone()
+            return json.loads(row[0]) if row and row[0] else None
+
+    def probe_reserve(self, task_id: str, request: dict, phase: str, language: str, global_cap: int = 10) -> str | None:
+        with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            active = db.execute("SELECT (SELECT count(*) FROM tasks WHERE status='sending') + (SELECT count(*) FROM probe_tasks WHERE status='sending')").fetchone()[0]
+            row = db.execute("SELECT t.*,j.status AS job_status FROM probe_tasks t JOIN probe_jobs j ON j.id=t.job WHERE t.id=?", (task_id,)).fetchone()
+            if not row or row["status"] != "pending" or row["job_status"] not in {"queued", "running"} or active >= global_cap:
+                return None
+            call = uid("probe-call"); now = time.time()
+            db.execute("INSERT INTO probe_calls VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", (call, task_id, row["job"], phase, language, canonical(request).decode(), None, digest(request), None, "sending", now, None))
+            db.execute("UPDATE probe_tasks SET status='sending',updated=? WHERE id=?", (now, task_id))
+            db.execute("UPDATE probe_jobs SET status='running',updated=? WHERE id=?", (now, row["job"]))
+            self.event(db, "probe:" + row["job"], "probe_call_started", {"call_id": call, "phase": phase, "language": language})
+            return call
+
+    def probe_finish(self, call: str, result: dict):
+        with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            row = db.execute("SELECT task,job FROM probe_calls WHERE id=?", (call,)).fetchone()
+            if not row:
+                raise ValueError("Unknown Probe reservation")
+            now = time.time(); encoded = canonical(result).decode()
+            db.execute("UPDATE probe_calls SET response=?,response_hash=?,status=?,finished=? WHERE id=?", (encoded, digest(result), "done" if result.get("valid") else "failed", now, call))
+            db.execute("UPDATE probe_tasks SET status=?,updated=? WHERE id=?", ("done" if result.get("valid") else "failed", now, row["task"]))
+            self.event(db, "probe:" + row["job"], "probe_call_finished", {"call_id": call, "valid": result.get("valid"), "reason": result.get("reason")})
+            event_kind = "probe_translation_finished" if db.execute("SELECT phase FROM probe_calls WHERE id=?", (call,)).fetchone()[0] == "translation" else "probe_test_finished"
+            self.event(db, "probe:" + row["job"], event_kind, {"call_id": call, "valid": result.get("valid"), "reason": result.get("reason")})
+
+    def probe_recover(self):
+        with self.connect() as db:
+            rows = db.execute("SELECT id,job,task FROM probe_calls WHERE status='sending'").fetchall()
+            for row in rows:
+                db.execute("UPDATE probe_calls SET status='unknown',finished=? WHERE id=?", (time.time(), row["id"]))
+                db.execute("UPDATE probe_tasks SET status='unknown',updated=? WHERE id=?", (time.time(), row["task"]))
+                db.execute("UPDATE probe_jobs SET status='unknown',updated=? WHERE id=?", (time.time(), row["job"]))
+                self.event(db, "probe:" + row["job"], "probe_job_failed", {"reason": "unknown_after_restart", "resent": False})
+
+    def probe_save(self, job: str, payload: dict) -> str:
+        with self.connect() as db:
+            existing = db.execute("SELECT id FROM probe_records WHERE job=?", (job,)).fetchone()
+            if existing:
+                return existing["id"]
+            record = uid("probe-record")
+            db.execute("INSERT INTO probe_records VALUES(?,?,?,?,?)", (record, job, canonical(payload).decode(), digest(payload), time.time()))
+            db.execute("UPDATE probe_jobs SET saved=1,updated=? WHERE id=?", (time.time(), job))
+        return record
+
+    def probe_discard(self, job: str):
+        with self.connect() as db:
+            row = db.execute("SELECT saved,status FROM probe_jobs WHERE id=?", (job,)).fetchone()
+            if not row:
+                raise ValueError("Unknown Probe job")
+            if row["saved"]:
+                raise ValueError("Saved Probe results cannot be discarded")
+            db.execute("UPDATE probe_jobs SET discarded=1,status='discarded',updated=? WHERE id=?", (time.time(), job))
+            self.event(db, "probe:" + job, "probe_job_discarded", {"job": job})
+
+    def probe_analysis(self, job: str, payload: dict) -> str:
+        analysis = uid("probe-analysis")
+        with self.connect() as db:
+            db.execute("INSERT INTO probe_analyses VALUES(?,?,?,?,?)", (analysis, job, canonical(payload).decode(), digest(payload), time.time()))
+            db.execute("UPDATE probe_jobs SET analysis_status='completed',updated=? WHERE id=?", (time.time(), job))
+            self.event(db, "probe:" + job, "probe_analysis_finished", {"analysis": analysis})
+        return analysis
+
+    def probe_records(self, domain: str = "", model: str = "", language: str = "", status: str = "") -> list[dict]:
+        with self.connect() as db:
+            rows = db.execute("SELECT id,job,payload,created FROM probe_records ORDER BY created DESC").fetchall()
+            output = []
+            for r in rows:
+                value = {"id": r["id"], "job": r["job"], "created": r["created"], **json.loads(r["payload"])}
+                if domain and value.get("domain_id") != domain:
+                    continue
+                if model and value.get("target_model_id") != model:
+                    continue
+                if language and language not in value.get("languages", []):
+                    continue
+                if status and not any(c.get("status") == status for c in value.get("calls", [])):
+                    continue
+                analysis = db.execute("SELECT payload FROM probe_analyses WHERE job=? ORDER BY created DESC LIMIT 1", (r["job"],)).fetchone()
+                value["analysis"] = json.loads(analysis[0]) if analysis else None
+                output.append(value)
+            return output

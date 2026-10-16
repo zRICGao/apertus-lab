@@ -7,6 +7,7 @@
 experiments/results/
 experiments/secrets/
 **/.venv/
+**/.runtime-deps/
 **/.llmwiki/
 experiments/runs/
 experiments/runtime-state/
@@ -16,6 +17,11 @@ experiments/runtime-state/
 workbench/research-ui/dist/
 workbench/research-ui/.vite/
 output/workbench/
+WORKBENCH_DATA/
+**/models.json
+**/campaigns.sqlite3
+**/worker-heartbeat.json
+**/probe-records/
 experiments/wiki-workspace/sources/research-campaign-*.json
 experiments/wiki-workspace/wiki/research-campaign-*.md
 experiments/wiki-workspace/sources/research-imports/

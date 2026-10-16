@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  font-family: Inter, "Segoe UI", "Microsoft YaHei", sans-serif;
+  font-family: ui-sans-serif, "Segoe UI", "Microsoft YaHei", sans-serif;
   color: #e6e9ed;
   background: #0c1015;
   font-synthesis: none;
@@ -92,7 +92,7 @@ summary:focus-visible {
   text-decoration: none;
   font-weight: 700;
   font-size: 23px;
-  letter-spacing: -1px;
+  letter-spacing: 0;
   padding: 0 7px;
 }
 .brand span {
@@ -163,7 +163,7 @@ summary:focus-visible {
   border: 1px solid #28343e;
   border-radius: 9px;
   padding: 18px 14px;
-  background: linear-gradient(120deg, #18232c, #151c24);
+  background: #18232c;
 }
 .side-note svg {
   color: #83bda9;
@@ -246,7 +246,7 @@ main {
 h1 {
   font-weight: 540;
   font-size: 29px;
-  letter-spacing: -0.7px;
+  letter-spacing: 0;
   margin: 0 0 12px;
 }
 h2 {
@@ -302,7 +302,7 @@ small {
   font-size: 31px;
   font-weight: 450;
   margin: 13px 0 9px;
-  letter-spacing: -1px;
+  letter-spacing: 0;
 }
 .metric > small {
   font-size: 10px;
@@ -437,7 +437,7 @@ small {
   place-items: center;
   border: 1px solid #314740;
   border-radius: 20px;
-  background: radial-gradient(circle, #244237, #15221f);
+  background: #244237;
   width: 84px;
   height: 84px;
   margin-bottom: 27px;
@@ -1104,6 +1104,114 @@ legend {
 .inline-check {
   margin: 18px 0;
 }
+.probe-heading {
+  align-items: flex-end;
+}
+.probe-target-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #b9ead8;
+  border: 1px solid #3e6256;
+  border-radius: 7px;
+  padding: 10px 13px;
+  font-size: 11px;
+}
+.probe-callout {
+  display: flex;
+  gap: 13px;
+  align-items: flex-start;
+  padding: 17px 20px;
+  color: #c5d9d4;
+  margin-bottom: 20px;
+}
+.probe-callout svg { color: #9ed7bd; flex-shrink: 0; }
+.probe-callout p { margin: 6px 0 0; color: #8fa4ac; font-size: 11px; line-height: 1.7; }
+.probe-domain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+}
+.probe-domain {
+  display: block;
+  text-align: left;
+  padding: 21px;
+  min-height: 190px;
+  background: #151e26;
+  border-color: #30404a;
+}
+.probe-domain:hover { background: #1b2b2d; border-color: #5a8978; }
+.probe-domain-icon { color: #a9dfc9; margin-bottom: 19px; }
+.probe-domain h2 { font-size: 16px; margin: 0 0 9px; }
+.probe-domain p { color: #91a3af; font-size: 11px; line-height: 1.75; min-height: 58px; }
+.probe-domain span { display: inline-flex; align-items: center; gap: 7px; color: #b8e6d2; font-size: 10px; margin-top: 10px; }
+.probe-recent { margin-top: 20px; padding: 18px 20px; }
+.probe-recent .section-title { margin: 0 0 14px; }
+.probe-recent .quiet { margin-left: auto; padding: 5px; font-size: 10px; }
+.record-row { display: flex; width: 100%; justify-content: space-between; gap: 15px; border: 0; border-top: 1px solid #27343e; border-radius: 0; background: transparent; padding: 12px 0; text-align: left; }
+.record-row span { color: #8597a3; font-size: 10px; }
+.probe-workspace { min-width: 0; }
+.back-link { border: 0; background: transparent; padding: 4px 0 16px; color: #a8cfc1; font-size: 11px; }
+.back-chevron { transform: rotate(180deg); }
+.probe-layout { display: grid; grid-template-columns: minmax(220px, .72fr) minmax(0, 1.7fr); gap: 18px; align-items: start; }
+.probe-guide, .probe-composer { padding: 22px; }
+.probe-guide h2 { margin: 16px 0 12px; font-size: 21px; }
+.probe-guide > p { color: #9aabb3; line-height: 1.8; font-size: 12px; }
+.guide-example { margin-top: 23px; padding: 14px; background: #1b292a; border: 1px solid #365249; border-radius: 7px; }
+.guide-example strong, .guide-limits strong { display: block; color: #a7d7c5; font-size: 10px; text-transform: uppercase; letter-spacing: .6px; }
+.guide-example p { color: #b9c9c5; line-height: 1.7; font-size: 11px; }
+.guide-limits { margin-top: 22px; }
+.guide-limits span { display: block; color: #83969e; margin-top: 8px; font-size: 10px; line-height: 1.7; }
+.probe-composer .section-title { margin-top: 0; }
+.probe-textarea { min-height: 205px; resize: vertical; line-height: 1.75; }
+.probe-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.probe-form-row label { margin-bottom: 2px; }
+.language-picker { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; margin: 15px 0; color: #9ab2b4; font-size: 10px; }
+.language-picker > span { display: inline-flex; align-items: center; gap: 5px; margin-right: 5px; }
+.language-picker input { width: 90px; margin: 0; padding: 6px 8px; font-size: 10px; }
+.language-chip { border-radius: 4px; padding: 6px 8px; font-size: 10px; background: #213532; border-color: #4a7667; color: #bfe6d5; }
+.composer-actions, .probe-result-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: 17px; }
+.suggestion { margin-top: 18px; }
+.probe-results { margin-top: 20px; padding: 0 22px 22px; }
+.probe-results .detail-heading { padding-inline: 0; }
+.probe-progress { color: #acd8c7; font-size: 13px; }
+.probe-original { border-top: 1px solid #2b3942; padding-top: 18px; }
+.probe-original strong, .probe-result label { display: block; color: #a1cdbd; font-size: 10px; margin-bottom: 7px; }
+.probe-original pre { max-height: 170px; }
+.probe-result-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 17px; }
+.probe-result { min-width: 0; border: 1px solid #30404a; border-radius: 7px; padding: 14px; background: #131c23; }
+.result-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; }
+.result-header h3 { margin: 0; font-size: 13px; }
+.probe-result pre { max-height: 230px; min-height: 70px; font-size: 10px; }
+.probe-result small { display: block; color: #6f8792; font-size: 9px; overflow-wrap: anywhere; }
+.analysis-result { margin-top: 22px; }
+.analysis-result .section-title { margin-top: 0; }
+.records-panel { padding: 20px; }
+.record-filters { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+.record-filters .search { flex: 1 1 280px; margin: 0; }
+.record-filters select { min-width: 150px; margin: 0; }
+.record-actions { display: flex; gap: 7px; flex-wrap: wrap; margin: 10px 0; }
+.record-actions .button { padding: 6px 9px; font-size: 10px; }
+.probe-call-audit { margin-top: 18px; border-top: 1px solid #2b3942; padding-top: 15px; }
+.probe-call-audit pre { max-height: 280px; }
+.model-edit-form { margin: 0 0 10px; }
+.record-card { border-bottom: 1px solid #2b3741; padding: 17px 0; }
+.record-card:last-child { border-bottom: 0; }
+.record-card > div { display: flex; justify-content: space-between; align-items: center; }
+.record-card h2 { font-size: 13px; line-height: 1.7; margin: 12px 0 5px; overflow-wrap: anywhere; }
+.record-card p, .record-card small { color: #8d9da8; font-size: 10px; }
+.confirmation-summary { background: #101820; border: 1px solid #2e4149; border-radius: 7px; padding: 13px 15px; }
+.confirmation-summary p { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 12px; margin: 9px 0; color: #b4c5c9; font-size: 11px; overflow-wrap: anywhere; }
+.confirmation-summary strong { color: #86b9a7; }
+.model-registry-panel { margin-top: 18px; }
+.model-registry-panel .section-title { margin-top: 0; }
+.model-row { display: flex; justify-content: space-between; gap: 15px; align-items: center; border-top: 1px solid #293640; padding: 14px 0; }
+.model-row strong, .model-row small { display: block; }
+.model-row small { color: #8397a2; font-size: 10px; margin-top: 5px; overflow-wrap: anywhere; }
+.model-row-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.model-row-actions button { font-size: 10px; padding: 6px 8px; }
+.model-row-actions .chosen { background: #27473e; border-color: #6da98f; color: #c6ebdb; }
+.model-form { border-top: 1px solid #2b3741; margin-top: 8px; padding-top: 10px; }
 @media (min-width: 1700px) {
   main {
     padding: 0 55px;
@@ -1260,6 +1368,22 @@ legend {
   }
   .defense-grid {
     grid-template-columns: 1fr;
+  }
+  .probe-domain-grid, .probe-result-grid, .probe-layout {
+    grid-template-columns: 1fr;
+  }
+  .probe-form-row {
+    grid-template-columns: 1fr;
+  }
+  .probe-heading {
+    align-items: flex-start;
+  }
+  .probe-result-grid {
+    gap: 10px;
+  }
+  .model-row {
+    align-items: flex-start;
+    flex-direction: column;
   }
   .form-grid {
     gap: 0 10px;

@@ -1,11 +1,14 @@
 export type Data = Record<string, any>;
-export async function api<T = Data>(path: string, body?: unknown): Promise<T> {
+export async function api<T = Data>(path: string, body?: unknown, method?: string): Promise<T> {
+  const requestMethod = method || (body === undefined ? "GET" : "POST");
   const response = await fetch(
     "/api/v1" + path,
-    body === undefined
+    body === undefined && !method
       ? {}
+      : body === undefined
+      ? { method: requestMethod, headers: { "Content-Type": "application/json" } }
       : {
-          method: "POST",
+          method: requestMethod,
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         },

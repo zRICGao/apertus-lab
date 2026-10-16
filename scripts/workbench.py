@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import signal
+import shutil
 import subprocess
 import sys
 import threading
@@ -18,6 +19,7 @@ from apertus_lab.platform.providers import load_env
 from apertus_lab.platform.store import Store
 from apertus_lab.platform.engine import Engine
 from apertus_lab.platform.contracts import CampaignSpec
+from apertus_lab.platform.probe import ProbeRuntime
 
 
 def main():
@@ -53,13 +55,23 @@ def main():
             while not stop.wait(2):
                 (store.root / "worker-heartbeat.json").write_text(json.dumps({"pid": os.getpid(), "time": time.time()}), encoding="utf-8")
         threading.Thread(target=heartbeat, daemon=True).start()
-        Engine(store).run(stop)
+        probe_stop = threading.Event()
+        probe_thread = threading.Thread(target=ProbeRuntime(store).run, args=(probe_stop,), daemon=True)
+        probe_thread.start()
+        try:
+            Engine(store).run(stop)
+        finally:
+            probe_stop.set()
+            probe_thread.join(timeout=10)
     else:
         import uvicorn
         from apertus_lab.platform.api import create_app
         child = None
         if not args.external_worker:
-            child = subprocess.Popen([sys.executable, str(Path(__file__).resolve()), "worker", "--store", str(args.store)],
+            python = sys.executable if Path(sys.executable).is_file() else shutil.which("python")
+            if not python:
+                raise RuntimeError("Cannot locate a runnable Python executable for the worker")
+            child = subprocess.Popen([python, str(Path(__file__).resolve()), "worker", "--store", str(args.store)],
                                      creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
         try:
             uvicorn.run(create_app(ROOT, args.store), host=args.host, port=args.port, log_level="warning")

@@ -48,7 +48,7 @@ The case: in a fictional Chinese evaluation task two candidates have identical e
 
 ## 6. Limitations
 
-The live result is narrow: one language, one wording, a synthetic task, four repeats per case (repeated prompts, not independent scenarios), and a deterministic judge without an independent model judge. The review of the live result was done by an AI assistant at a team member's request, not by an independent human. Real 10-way parallel runs, research-model quality and annotation agreement are not yet validated. The Docker build was not run on the authoring machine; the services were run directly with Python. Parts of the repository reuse earlier components (assets extracted from BreachWeave and a local LLM Wiki fork), listed in `management/REUSE_ASSETS.md`.
+The live result is narrow: one wording, a synthetic task, four repeats per case (repeated prompts, not independent scenarios), and a deterministic judge without an independent model judge. The review of the live result was done by an AI assistant at a team member's request, not by an independent human. Real 10-way parallel runs, research-model quality and annotation agreement are not yet validated. Parts of the repository reuse earlier components (assets extracted from BreachWeave and a local LLM Wiki fork), listed in `management/REUSE_ASSETS.md`.
 
 ## 7. Reproducibility
 
@@ -60,7 +60,7 @@ LLM_BASE_URL=https://api.inference.cscs.ch/v1
 LLM_API_KEY=<your key>
 ```
 
-No GPU is needed because the model is hosted.
+No GPU is needed because the model is hosted. The Docker build and both services were verified by the team in mock mode (`management/evidence/workbench-v3-acceptance-2026-10-15.md`).
 
 ## 8. Next steps
 

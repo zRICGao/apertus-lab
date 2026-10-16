@@ -13,7 +13,7 @@ from urllib.request import Request, urlopen
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "experiments/src"))
+sys.path.insert(0, str(ROOT / "track_2b/src"))
 
 
 def main():

@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def build(destination: Path, spec_path: Path) -> Path:
     import sys
-    sys.path.insert(0, str(ROOT / "experiments/src"))
+    sys.path.insert(0, str(ROOT / "track_2b/src"))
     from apertus_lab.live_contracts import validate_spec
     spec = validate_spec(json.loads(spec_path.read_text(encoding="utf-8-sig")))
     if destination.exists():
@@ -20,7 +20,7 @@ def build(destination: Path, spec_path: Path) -> Path:
     track = destination / "track_1a"
     for name in ("src/apertus_lab", "data", "findings", "docs"):
         (track / name).mkdir(parents=True)
-    for source in sorted((ROOT / "experiments/src/apertus_lab").iterdir()):
+    for source in sorted((ROOT / "track_2b/src/apertus_lab").iterdir()):
         if source.suffix in {".py", ".json"} and source.is_file():
             shutil.copyfile(source, track / "src/apertus_lab" / source.name)
     (track / "data/spec.json").write_text(json.dumps(spec, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

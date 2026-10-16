@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     import sys
-    env = dict(os.environ, PYTHONPATH=str(ROOT / "experiments/src"), PYTHONIOENCODING="utf-8")
+    env = dict(os.environ, PYTHONPATH=str(ROOT / "track_2b/src"), PYTHONIOENCODING="utf-8")
     bun = ROOT / ".tools/node_modules/bun/bin/bun.exe"
     if not bun.exists():
         raise SystemExit(f"Project Bun executable not found: {bun}")

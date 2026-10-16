@@ -2,7 +2,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile.workbench
+      dockerfile: Dockerfile
     image: apertus-research-workbench:3
     ports:
       - "127.0.0.1:8770:8770"

@@ -2,7 +2,7 @@
 from pathlib import Path
 import sys
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "track_2b" / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 from apertus_lab.basic_cli import main
 
 if __name__ == "__main__":

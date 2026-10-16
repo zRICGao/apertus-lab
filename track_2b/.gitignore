@@ -25,3 +25,16 @@ build/
 .DS_Store
 .idea/
 .vscode/
+
+# Project runtime data and build output
+experiments/results/
+experiments/secrets/
+experiments/runs/
+experiments/runtime-state/
+src/research-ui/dist/
+src/research-ui/.vite/
+output/workbench/
+experiments/wiki-workspace/sources/research-campaign-*.json
+experiments/wiki-workspace/wiki/research-campaign-*.md
+experiments/wiki-workspace/sources/research-imports/
+experiments/wiki-workspace/v3-architecture-acceptance.md

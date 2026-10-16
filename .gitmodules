@@ -1,12 +1,12 @@
 [submodule "knowledge/llmwiki"]
-	path = knowledge/llmwiki
+	path = track_2b/knowledge/llmwiki
 	url = https://github.com/lucasastorian/llmwiki.git
 [submodule "workbench/BreachWeave"]
-	path = workbench/BreachWeave
+	path = track_2b/workbench/BreachWeave
 	url = https://github.com/m-sec-org/BreachWeave.git
 [submodule "submission/project-template"]
-	path = submission/project-template
+	path = track_2b/submission/project-template
 	url = https://github.com/HackApertus/project-template.git
 [submodule "submission/team-track-2b"]
-	path = submission/team-track-2b
+	path = track_2b/submission/team-track-2b
 	url = https://github.com/zRICGao/Hackapertus-TEAM.git

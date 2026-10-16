@@ -5,7 +5,7 @@ A bounded, evidence-based red-teaming workbench for Apertus.
 - **Track:** Track 2B — Apertus Lab
 - **Event:** Online
 - **Team:** Apertus Lab — Chen Gao, Namila Namila
-- **Demo:** link to video (added before submission)
+- **Demo:** [Demo video (Google Drive)](https://drive.google.com/drive/folders/1Cbze3F5ImYD3e0nM8DVLKSJblfDYpN6v?usp=sharing)
 
 ## 1. Summary
 

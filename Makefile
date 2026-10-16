@@ -26,10 +26,10 @@ agent-status:
 	$(PYTHON) scripts/agent.py
 
 workbench:
-	$(PYTHON) scripts/workbench.py serve
+	$(PYTHON) track_2b/src/workbench.py serve
 
 workbench-demo:
-	$(PYTHON) scripts/workbench.py demo
+	$(PYTHON) track_2b/src/workbench.py demo
 
 workbench-test:
 	$(PYTHON) scripts/test-workbench.py

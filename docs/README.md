@@ -3,7 +3,7 @@
 这组文档面向接手项目的开发者和 AI。阅读时要区分三类内容：
 
 - **规范**：`experiments/examples/` 中的 JSON spec，定义模型、prompt、预算、batch、confirmation 阈值和 judge 元数据。
-- **实现**：`experiments/src/apertus_lab/` 中的 live runner、并行派发、transport、SQLite ledger 和 evaluator。
+- **实现**：`track_2b/src/apertus_lab/` 中的 live runner、并行派发、transport、SQLite ledger 和 evaluator。
 - **观察**：本目录的总结和 `experiments/docs/` 的方法说明，记录实际运行做了什么、结果支持什么、结果不能支持什么。
 
 ## 当前已发布内容

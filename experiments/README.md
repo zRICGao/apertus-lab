@@ -23,9 +23,10 @@ Python 3.11+；运行时仅使用标准库。目标固定 CSCS Apertus v1.5 70B�
 在项目根 PowerShell：
 
 ```powershell
-$env:PYTHONPATH = "$PWD/experiments/src"
+$env:PYTHONPATH = "$PWD/track_2b/src"
 $env:PYTHONIOENCODING = 'utf-8'
 python -m unittest discover -s experiments/tests -v
+python -m unittest discover -s track_2b/src/tests -v
 python -m apertus_lab.cli validate-live --spec experiments/examples/live-spec.json
 ```
 

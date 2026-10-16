@@ -1,10 +1,13 @@
 # Source layout
 
-To avoid duplicating a large code base, the implementation stays in its original locations:
-
-| Path (repository root) | Contents |
+| Path | Contents |
 |---|---|
-| `experiments/src/apertus_lab/platform/` | FastAPI app, persistent worker, evidence store, judge, replay, export, Probe |
-| `experiments/tests/` | Offline test suite |
-| `workbench/research-ui/` | React / TypeScript bilingual UI |
-| `Dockerfile.workbench`, `compose.workbench.yml` | Container build and services (api + worker) |
+| `apertus_lab/platform/` | Workbench: FastAPI app, persistent worker, evidence store, judge, replay, export, Probe |
+| `apertus_lab/` (other modules) | Earlier MVP runner, live transport and CLI used by the replay package and legacy tools |
+| `research-ui/` | React / TypeScript bilingual interface (Vite) |
+| `workbench.py` | Entry point: `serve`, `worker`, `demo` |
+| `tests/` | Platform and Probe tests (`python -m unittest discover -s track_2b/src/tests`) |
+| `pyproject.toml` | Package metadata for `apertus_lab` |
+
+The container build is `Dockerfile.workbench` and `compose.workbench.yml` at the repository root; `make run` starts it.
+Older MVP tests and example specs remain in `experiments/tests` and `experiments/examples`.

@@ -1,6 +1,6 @@
 # Apertus Lab v3：并行启发式研究工作台
 
-2026-10-15，Europe/Zurich。用户确认先完成平台架构；正式比赛发现与最终提交是独立验收。实现源代码位于 `experiments/src/apertus_lab/platform`，前端位于 `workbench/research-ui`。
+2026-10-15，Europe/Zurich。用户确认先完成平台架构；正式比赛发现与最终提交是独立验收。实现源代码位于 `track_2b/src/apertus_lab/platform`，前端位于 `track_2b/src/research-ui`。
 
 ## 启动与使用
 
@@ -16,9 +16,9 @@ docker compose -f compose.workbench.yml up --build -d
 
 ```powershell
 python -m pip install -r requirements-workbench.lock.txt
-npm --prefix workbench/research-ui ci
-npm --prefix workbench/research-ui run build
-python scripts/workbench.py serve
+npm --prefix track_2b/src/research-ui ci
+npm --prefix track_2b/src/research-ui run build
+python track_2b/src/workbench.py serve
 ```
 
 本机 launcher 启动独立 worker 子进程；Docker Compose 中 API 与 worker 是两个服务。浏览器关闭不会丢失队列。暂停停止新派发，已预留的在途请求继续保存。未知请求不重发、不退额度；恢复不会延长绝对截止时间。运行中更改问题／参数使用“调整为新版本”，保留父任务关系和旧证据。
@@ -105,7 +105,7 @@ flowchart LR
 
 所有角色计入总额；阶段预留不可借用。超过额度的任务保留 budget_skipped，报告缺口。预检显示整个矩阵需求，预算是上限而不是保证完成所有分支。重复运行不能重置旧任务预算。
 
-客观判定回归样本见 `experiments/src/apertus_lab/platform/calibration.json`：含正确／错误数字、输出格式、决策、拒答与传输异常，标明只是程序回归样本，尚非领域专家校准数据。
+客观判定回归样本见 `track_2b/src/apertus_lab/platform/calibration.json`：含正确／错误数字、输出格式、决策、拒答与传输异常，标明只是程序回归样本，尚非领域专家校准数据。
 
 27 张原创三语研究卡：注入的伪权威／引用指令／紧急性；事实的错误前提／来源冲突／报告式陈述；身份的匹配身份／位置反转／教育开放评价。每卡含假设、场景、control/probe、rubric、来源、语言审阅状态和限制。事实依据给出宪法149条来源链接，但官方快照和翻译仍标未审阅。教学示例没有复制 UNESCO 原文。
 
@@ -134,12 +134,13 @@ Planner 在一个方向的种子完成后读取实际反馈，可停止待执行
 API 文档：http://127.0.0.1:8770/docs。任务、来源、预检、启停、annotations、reviews、export 共用业务服务；SSE `/api/v1/events` 支持 Last-Event-ID。跨来源写入拒绝。数据默认 `experiments/runs/workbench-v3`，Docker 使用 named volume；通过 SQLite online backup 或停止服务后复制完整卷备份，不能只复制正在写入的 .sqlite3 而遗漏 WAL。
 
 ```powershell
-$env:PYTHONPATH = "$PWD/experiments/src"
+$env:PYTHONPATH = "$PWD/track_2b/src"
 $env:TEMP = "$PWD/experiments/results"
 $env:TMP = $env:TEMP
 python -m unittest discover -s experiments/tests -v
-npm --prefix workbench/research-ui run build
-python scripts/workbench.py demo
+python -m unittest discover -s track_2b/src/tests -v
+npm --prefix track_2b/src/research-ui run build
+python track_2b/src/workbench.py demo
 ```
 
 Windows 沙箱可能阻止 asyncio socketpair / 回环端口；在正常本地终端或 Linux 容器运行 HTTP 测试。校验包括并发预留、预算、恢复、证据不可变、坏规格、格式与语义分离、留出隔离、mock 禁止晋升、审核导出与独立 replay。

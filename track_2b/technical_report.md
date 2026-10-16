@@ -33,7 +33,7 @@ Requests use temperature 0 and a bounded `max_tokens`. Answers are required to b
 
 ## 4. Data
 
-No external dataset is used. The 27 research cards and their rubrics were written by the team (`experiments/src/apertus_lab/platform/templates.py`); all scenarios are synthetic and fictional. Raw responses, ledgers and credentials stay outside Git (`.env`, `WORKBENCH_DATA`). No personal data and no human subjects are involved.
+No external dataset is used. The 27 research cards and their rubrics were written by the team (`track_2b/src/apertus_lab/platform/templates.py`); all scenarios are synthetic and fictional. Raw responses, ledgers and credentials stay outside Git (`.env`, `WORKBENCH_DATA`). No personal data and no human subjects are involved.
 
 ## 5. Evaluation
 

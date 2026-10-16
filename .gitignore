@@ -14,8 +14,8 @@ experiments/runtime-state/
 **/.pytest_cache/
 **/.ruff_cache/
 **/*.egg-info/
-workbench/research-ui/dist/
-workbench/research-ui/.vite/
+track_2b/src/research-ui/dist/
+track_2b/src/research-ui/.vite/
 output/workbench/
 WORKBENCH_DATA/
 **/models.json

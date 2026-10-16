@@ -13,7 +13,8 @@ dependencies = []
 apertus-lab = "apertus_lab.cli:main"
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["."]
+include = ["apertus_lab*"]
 
 [tool.setuptools.package-data]
 apertus_lab = ["*.json"]
@@ -25,4 +26,4 @@ line-length = 100
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["."]

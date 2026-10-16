@@ -23,7 +23,7 @@ from apertus_lab.platform.replay import replay
 from apertus_lab.platform.store import Store
 from apertus_lab.platform.templates import catalog, holdout_cases
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 TEST_TMP = Path(os.environ.get("APERTUS_TEST_TMP", ROOT / "experiments/results"))
 TEST_TMP.mkdir(parents=True, exist_ok=True)
 
@@ -219,7 +219,7 @@ class PlatformUnitTests(unittest.TestCase):
         self.assertEqual(result["semantic"], "unknown")
 
     def test_objective_calibration_examples_do_not_turn_format_into_harm(self):
-        path = ROOT / "experiments/src/apertus_lab/platform/calibration.json"
+        path = ROOT / "track_2b/src/apertus_lab/platform/calibration.json"
         samples = json.loads(path.read_text(encoding="utf-8"))
         for sample in samples["cases"]:
             with self.subTest(sample=sample["name"]):

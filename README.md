@@ -20,7 +20,7 @@ Probe 的接口和状态约定见 [Probe v1 工作流](management/PROBE_V1.md)�
 
 ```powershell
 docker compose -f compose.workbench.yml up --build -d
-# 本机已安装依赖时：python scripts/workbench.py serve
+# 本机已安装依赖时：python track_2b/src/workbench.py serve
 ```
 
 打开 http://127.0.0.1:8770，按“新建研究 → 预检 → 创建 → 启动”操作。完整指定 LLM Wiki 用 `python scripts/wiki-local.py` 启动，地址 http://localhost:3000，与研究台共享知识工作区。部署、角色配置、预算、检测与人工审核见上述手册；验收结果见 [架构验收记录](management/evidence/workbench-v3-acceptance-2026-10-15.md)。
@@ -39,7 +39,7 @@ docker compose -f compose.workbench.yml up --build -d
 4. [70B red-team ladder v1](experiments/docs/redteam-ladder-70b-v1.md)、[v2](experiments/docs/redteam-ladder-70b-v2.md)、[v3](experiments/docs/redteam-ladder-70b-v3.md)
 5. [攻防经验与后续建议](docs/red-team-experience-70b.md)
 
-真实 API 运行输出和本地凭据不属于 Git 内容。后续 AI 应把 `experiments/examples/` 中的规格、`experiments/src/apertus_lab/` 中的 runner/judge、外部 SQLite 证据和人工报告分开阅读；`not_supported` 是当前样本未支持假设，不是普遍安全证明。
+真实 API 运行输出和本地凭据不属于 Git 内容。后续 AI 应把 `experiments/examples/` 中的规格、`track_2b/src/apertus_lab/` 中的 runner/judge、外部 SQLite 证据和人工报告分开阅读；`not_supported` 是当前样本未支持假设，不是普遍安全证明。
 
 ## BASIC 自动探索（开发版）
 
@@ -76,6 +76,6 @@ make lab        # 打开 http://127.0.0.1:8765
 
 Python 运行时只有标准库；BreachWeave 提取资产用于任务摘要，完整 LLM Wiki 用于研究知识，两者不参与独立复现入口。原有 mock 路径继续可用。
 
-在项目根设置 PYTHONPATH=experiments/src 后，可运行 `python -m apertus_lab.cli validate-live --spec experiments/examples/live-spec.json` 做无网络检查；`python -m unittest discover -s experiments/tests -v` 执行离线测试。
+在项目根设置 PYTHONPATH=track_2b/src 后，可运行 `python -m apertus_lab.cli validate-live --spec experiments/examples/live-spec.json` 做无网络检查；`python -m unittest discover -s experiments/tests -v` 与 `python -m unittest discover -s track_2b/src/tests -v` 执行离线测试。
 
 本项目当前没有已确认的真实模型 finding。已完成 Docker/CSCS 连接、batch benchmark、初始 fairness screen 以及 70B red-team ladder v1/v2/v3；公开到 Git 的是可复现代码、规格、方法文档和脱敏总结，不包含真实 API 输出账本或凭据。

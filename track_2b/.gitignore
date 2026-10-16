@@ -38,3 +38,6 @@ experiments/wiki-workspace/sources/research-campaign-*.json
 experiments/wiki-workspace/wiki/research-campaign-*.md
 experiments/wiki-workspace/sources/research-imports/
 experiments/wiki-workspace/v3-architecture-acceptance.md
+
+# Local reference notes, not part of the submission
+BreachWeave_4ac5fc4_Architecture_Guide.md

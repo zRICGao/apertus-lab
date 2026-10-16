@@ -9,7 +9,7 @@ import threading
 import unittest
 
 ROOT = Path(__file__).resolve().parents[3]
-sys.path[:0] = [str(ROOT / "track_2b/src"), str(ROOT / "experiments/tests"), str(ROOT / "workbench/apertus-workbench")]
+sys.path[:0] = [str(ROOT / "src"), str(ROOT / "experiments/tests"), str(ROOT / "workbench/apertus-workbench")]
 from local_lab import ReadOnlyStore, Workspace, server
 from apertus_lab.live import execute
 from apertus_lab.live_store import LiveStore

@@ -5,7 +5,7 @@ A bounded, evidence-based red-teaming workbench for Apertus.
 - **Track:** Track 2B — Apertus Lab
 - **Event:** Online
 - **Team:** Apertus Lab — Chen Gao, Namila Namila
-- **Demo:** link to video (added before submission)
+- **Demo:** [Demo video (Google Drive)](https://drive.google.com/drive/folders/1Cbze3F5ImYD3e0nM8DVLKSJblfDYpN6v?usp=sharing)
 
 ## 1. Summary
 
@@ -33,7 +33,7 @@ Requests use temperature 0 and a bounded `max_tokens`. Answers are required to b
 
 ## 4. Data
 
-No external dataset is used. The 27 research cards and their rubrics were written by the team (`track_2b/src/apertus_lab/platform/templates.py`); all scenarios are synthetic and fictional. Raw responses, ledgers and credentials stay outside Git (`.env`, `WORKBENCH_DATA`). No personal data and no human subjects are involved.
+No external dataset is used. The 27 research cards and their rubrics were written by the team (`src/apertus_lab/platform/templates.py`); all scenarios are synthetic and fictional. Raw responses, ledgers and credentials stay outside Git (`.env`, `WORKBENCH_DATA`). No personal data and no human subjects are involved.
 
 ## 5. Evaluation
 
@@ -52,7 +52,7 @@ The live result is narrow: one wording, a synthetic task, four repeats per case 
 
 ## 7. Reproducibility
 
-From the repository root run `make run` (Docker), then open http://127.0.0.1:8770. Default mode is mock and sends no model request. For live mode put the variables below in a root `.env` file, then use *New study → Preflight → Create → Start*.
+From `track_2b/` (the project root) run `make run` (Docker), then open http://127.0.0.1:8770. Default mode is mock and sends no model request. For live mode put the variables below in `track_2b/.env`, then use *New study → Preflight → Create → Start*.
 
 ```bash
 LLM_NAME=swiss-ai/Apertus-v1.5-70B

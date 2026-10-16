@@ -28,7 +28,7 @@ def inspect(config_path: Path, environ: dict[str, str] | None = None) -> dict:
     env = os.environ if environ is None else environ
     raw = json.loads(config_path.read_text(encoding="utf-8-sig"))
     if raw.get("schema_version") == "BASIC-1":
-        sys.path.insert(0, str(ROOT / "track_2b/src"))
+        sys.path.insert(0, str(ROOT / "src"))
         from apertus_lab.basic_contracts import validate_config
         data = validate_config(raw)
         return {"configuration_valid": True, "profile": "BASIC-1", "mode": data["mode"],

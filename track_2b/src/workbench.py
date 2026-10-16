@@ -12,8 +12,8 @@ import sys
 import threading
 import time
 
-ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "track_2b/src"))
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
 
 from apertus_lab.platform.providers import load_env
 from apertus_lab.platform.store import Store

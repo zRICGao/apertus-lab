@@ -36,7 +36,7 @@ flowchart TB
 |---|---|---|
 | 工作台 | `workbench/apertus-workbench` | Python 本地只读服务 + 中文页面；查看运行、逐条输入/回答/判定、Wiki 引用和范围。Bun 复用固定来源 Memory/Idea；并非完整上游运行时 |
 | 配置与入口 | `management/lab-workspace.json`、`scripts/lab.py`、根 Makefile | 集中声明账本、Wiki、状态目录；提供 status/sync/serve/wiki |
-| 实验核心 | `track_2b/src/apertus_lab` | spec 校验、资源限制、默认串行/显式成对并行调度、CSCS transport、持久证据、评估、独立 replay、人工 review 和导出 |
+| 实验核心 | `src/apertus_lab` | spec 校验、资源限制、默认串行/显式成对并行调度、CSCS transport、持久证据、评估、独立 replay、人工 review 和导出 |
 | 原始证据 | `submission/release/track_1a/output/evidence.sqlite3` | 已有真实 demo：6 次探索 + 12 次确认，全部符合预期；假设未获支持。工作台以 SQLite 只读模式访问 |
 | 开发账本 | `experiments/runs/mvp` | 独立配置，当前未创建；查看状态不会创建账本 |
 | 任务内状态 | `experiments/runtime-state` | 保存按证据摘要幂等导入的 Memory；不将 Memory/Idea 状态自动晋升为 finding |

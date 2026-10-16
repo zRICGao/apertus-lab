@@ -160,7 +160,7 @@ def export_bundle(store: Store, campaign: str, destination: Path) -> Path:
         shutil.copyfile(parent / name, src / name)
     for name in ("__init__.py", "providers.py", "contracts.py", "evaluation.py", "replay.py"):
         shutil.copyfile(Path(__file__).parent / name, src / "platform" / name)
-    lock = Path(__file__).resolve().parents[4] / "requirements-workbench.lock.txt"
+    lock = Path(__file__).resolve().parents[3] / "requirements-workbench.lock.txt"
     shutil.copyfile(lock, root / "requirements.txt")
     (root / "Dockerfile").write_text('FROM python:3.12-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY src src\nCOPY data/frozen.json data/frozen.json\nENV PYTHONPATH=/app/src\nENTRYPOINT ["python","-m","apertus_lab.platform.replay","--frozen","data/frozen.json","--output","/output"]\n', encoding="utf-8")
     flag = " --live" if state["spec"]["mode"] == "live" else ""

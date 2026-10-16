@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
-$env:PYTHONPATH = Join-Path $projectRoot 'track_2b/src'
+$env:PYTHONPATH = Join-Path $projectRoot 'src'
 $env:PYTHONIOENCODING = 'utf-8'
 Push-Location $projectRoot
 try {

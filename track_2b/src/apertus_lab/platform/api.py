@@ -366,7 +366,7 @@ def create_app(root: Path, store_root: Path | None = None) -> FastAPI:
         output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         return FileResponse(output, filename=output.name, media_type="application/json")
 
-    frontend = root / "track_2b/src/research-ui/dist"
+    frontend = root / "src/research-ui/dist"
     if (frontend / "assets").is_dir():
         app.mount("/assets", StaticFiles(directory=frontend / "assets"), name="assets")
 
@@ -375,7 +375,7 @@ def create_app(root: Path, store_root: Path | None = None) -> FastAPI:
         if path.startswith("api/"):
             raise HTTPException(404)
         if not (frontend / "index.html").is_file():
-            raise HTTPException(503, "Build track_2b/src/research-ui first, or use its Vite development server")
+            raise HTTPException(503, "Build src/research-ui first, or use its Vite development server")
         return FileResponse(frontend / "index.html")
 
     return app
